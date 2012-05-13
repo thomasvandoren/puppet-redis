@@ -1,0 +1,94 @@
+#/bin/sh
+#Configurations injected by install_server below....
+
+EXEC=/opt/redis-server/bin/redis-server
+CLIEXEC=/opt/redis-server/bin/redis-cli
+PIDFILE=/var/run/redis_6379.pid
+CONF="/etc/redis/6379.conf"
+
+REDISPORT="6379"
+
+###############
+
+# description: redis_6379 is the redis daemon.
+### BEGIN INIT INFO
+# Provides: redis_6379
+# Required-Start: 
+# Required-Stop: 
+# Should-Start: 
+# Should-Stop: 
+# Short-Description: start and stop redis_6379
+# Description: Redis daemon
+### END INIT INFO
+
+set -e
+
+start()
+{
+    if [ -f $PIDFILE ]
+    then
+        echo "$PIDFILE exists, process is already running or crashed"
+    else
+        echo "Starting Redis server..."
+        $EXEC $CONF
+    fi
+}
+
+stop()
+{
+    if [ ! -f $PIDFILE ]
+    then
+        echo "$PIDFILE does not exist, process is not running"
+    else
+        PID=$(cat $PIDFILE)
+        echo "Stopping ..."
+        $CLIEXEC -p $REDISPORT shutdown
+        while [ -x /proc/${PID} ]
+        do
+            echo "Waiting for Redis to shutdown ..."
+            sleep 1
+        done
+        echo "Redis stopped"
+    fi
+}
+
+restart()
+{
+    stop
+    echo "Sleeping for 3 seconds..."
+    start
+}
+
+status()
+{
+    if [ ! -f $PIDFILE ]
+    then
+	echo "$PIDFILE does not exist, redis-server is not running"
+	exit 3
+    elif [ ! -x /proc/$(cat $PIDFILE) ]
+    then
+	echo "$PIDFILE exists, process is not running though"
+	exit 1
+    else
+	echo "redis-server is running"
+	exit 0
+    fi
+}
+
+case "$1" in
+    start)
+	start 
+	;;
+    stop)
+	stop
+        ;;
+    restart)
+	restart
+	;;
+    status)
+	status
+	;;
+    *)
+        echo "Usage: $SCRIPTNAME {start|stop|restart|status}"
+        ;;
+esac
