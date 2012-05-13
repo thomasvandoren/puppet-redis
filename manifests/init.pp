@@ -8,11 +8,11 @@
 #
 # === Authors
 #
-# Thomas Van Doren <thomas@cozi.com>
+# Thomas Van Doren
 #
 # === Copyright
 #
-# Copyright 2012 Cozi Group, Inc., unless otherwise noted.
+# Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
 class redis-server {
   $redis_src_dir = '/opt/redis-src'
