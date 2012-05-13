@@ -56,6 +56,7 @@ restart()
 {
     stop
     echo "Sleeping for 3 seconds..."
+    sleep 3
     start
 }
 
@@ -70,7 +71,7 @@ status()
 	echo "$PIDFILE exists, process is not running though"
 	exit 1
     else
-	echo "redis-server is running"
+	echo "redis-server is running with PID $(cat $PIDFILE)"
 	exit 0
     fi
 }
