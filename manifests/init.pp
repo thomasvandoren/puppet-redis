@@ -2,6 +2,45 @@
 #
 # Install and configure redis-server.
 #
+# === Parameters
+#
+# [*redis_src_dir*]
+#   Location to unpack source code before building and installing it.
+#   Default: /opt/redis-src
+#
+# [*redis_bin_dir*]
+#   Location to install redis-server binaries.
+#   Default: /opt/redis-server
+#
+# [*redis_max_memory*]
+#   Set the redis config value maxmemory (bytes).
+#   Default: 4gb
+#
+# [*redis_max_clients*]
+#   Set the redis config value maxclients.
+#   Default: 0
+#
+# [*redis_timeout*]
+#   Set the redis config value timeout (seconds).
+#   Default: 300
+#
+# [*redis_loglevel*]
+#   Set the redis config value loglevel. Valid values are debug,
+#   verbose, notice, and warning.
+#   Default: notice
+#
+# [*redis_databases*]
+#   Set the redis config value databases.
+#   Default: 16
+#
+# [*redis_slowlog_log_slower_than*]
+#   Set the redis config value slowlog-log-slower-than (microseconds).
+#   Default: 10000
+#
+# [*redis_showlog_max_len*]
+#   Set the redis config value slowlog-max-len.
+#   Default: 1024
+#
 # === Examples
 #
 # include redis-server
