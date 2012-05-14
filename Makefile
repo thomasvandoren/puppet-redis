@@ -7,6 +7,7 @@
 ECHO=@echo
 PUPPET=puppet
 RAKE=@rake
+RM=@rm
 
 .PHONY: help
 help:
