@@ -7,5 +7,6 @@ else
 end
 
 gem 'rake'
+gem 'rspec'
 gem 'puppet-lint'
 gem 'puppet', puppetversion

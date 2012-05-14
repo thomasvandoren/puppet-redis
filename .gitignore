@@ -5,3 +5,6 @@
 
 # puppet-module build artifacts
 /pkg
+
+# Test artifacts.
+Gemfile.lock
