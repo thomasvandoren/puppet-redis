@@ -2,3 +2,6 @@
 *~
 *#*#
 *.#*
+
+# puppet-module build artifacts
+/pkg
