@@ -86,26 +86,26 @@ class redis-server (
   }
   file { 'redis-pkg':
     ensure => present,
-    path   => "${redis_pkg}",
-    mode   => 0644,
+    path   => $redis_pkg,
+    mode   => '0644',
     source => 'puppet:///modules/redis-server/redis-2.4.13.tar.gz',
   }
   file { 'redis-init':
     ensure => present,
     path   => '/etc/init.d/redis_6379',
-    mode   => 0755,
+    mode   => '0755',
     source => 'puppet:///modules/redis-server/redis.init',
   }
   file { '6379.conf':
-    ensure => present,
-    path   => '/etc/redis/6379.conf',
-    mode   => 0644,
+    ensure  => present,
+    path    => '/etc/redis/6379.conf',
+    mode    => '0644',
     content => template('redis-server/6379.conf.erb'),
   }
   file { 'redis.conf':
     ensure => present,
     path   => '/etc/redis/redis.conf',
-    mode   => 0644,
+    mode   => '0644',
     source => 'puppet:///modules/redis-server/redis.conf',
   }
   file { 'redis-cli-link':
@@ -118,14 +118,14 @@ class redis-server (
   }
   exec { 'unpack-redis':
     command => "tar --strip-components 1 -xzf ${redis_pkg}",
-    cwd     => "${redis_src_dir}",
+    cwd     => $redis_src_dir,
     path    => '/bin:/usr/bin',
     unless  => "test -f ${redis_src_dir}/Makefile",
     require => File['redis-pkg'],
   }
   exec { 'install-redis':
     command => "make && make install PREFIX=${redis_bin_dir}",
-    cwd     => "${redis_src_dir}",
+    cwd     => $redis_src_dir,
     path    => '/bin:/usr/bin',
     unless  => "test $(${redis_bin_dir}/bin/redis-server --version | cut -d ' ' -f 1) = 'Redis'",
     require => [ Exec['unpack-redis'],
@@ -133,8 +133,8 @@ class redis-server (
                  ],
   }
   service { 'redis-server':
-    name      => 'redis_6379',
     ensure    => running,
+    name      => 'redis_6379',
     enable    => true,
     require   => [ File['6379.conf'],
                    File['redis.conf'],

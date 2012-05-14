@@ -21,6 +21,6 @@ help:
 
 .PHONY: check
 check:
-	$(RAKE)
+	$(RAKE) || true
 	@find . -type f -name '*.pp' -exec $(PUPPET) parser validate {} ';'
 	@find tests -type f -name '*.pp' -exec $(PUPPET) apply --noop --verbose {} ';'
