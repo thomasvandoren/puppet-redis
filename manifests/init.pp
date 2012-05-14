@@ -14,10 +14,18 @@
 #
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
-class redis-server {
-  $redis_src_dir = '/opt/redis-src'
-  $redis_pkg     = "${redis_src_dir}/redis-2.4.13.tar.gz"
-  $redis_bin_dir = '/opt/redis-server'
+class redis-server (
+  $redis_src_dir = '/opt/redis-src',
+  $redis_bin_dir = '/opt/redis-server',
+  $redis_max_memory = '4gb',
+  $redis_max_clients = 0,           # 0 = unlimited
+  $redis_timeout = 300,         # 0 = disabled
+  $redis_loglevel = 'notice',
+  $redis_databases = 16,
+  $redis_slowlog_log_slower_than = 10000, # microseconds
+  $redis_slowlog_max_len = 1024
+  ) {
+  $redis_pkg = "${redis_src_dir}/redis-2.4.13.tar.gz"
 
   File {
     owner => root,
@@ -53,7 +61,7 @@ class redis-server {
     ensure => present,
     path   => '/etc/redis/6379.conf',
     mode   => 0644,
-    source => 'puppet:///modules/redis-server/6379.conf',
+    content => template('redis-server/6379.conf.erb'),
   }
   file { 'redis.conf':
     ensure => present,
