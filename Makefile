@@ -5,6 +5,7 @@
 #
 
 ECHO=@echo
+GIT=git
 PUPPET=puppet
 RAKE=@rake
 RM=@rm
@@ -15,13 +16,15 @@ help:
 	$(ECHO) ""
 	$(ECHO) "    Common puppet tasks."
 	$(ECHO) ""
-	$(ECHO) "    check - parse and validate all manifests."
+	$(ECHO) "    check     - parse and validate all manifests."
 	$(ECHO) ""
-	$(ECHO) "    build - build the tar ball for puppet forge."
+	$(ECHO) "    build     - build the tar ball for puppet forge."
 	$(ECHO) ""
-	$(ECHO) "    clean - remote build status."
+	$(ECHO) "    clean     - remove build artifacts."
 	$(ECHO) ""
-	$(ECHO) "    help  - print this help page."
+	$(ECHO) "    git-clean - remove *all* unversioned files."
+	$(ECHO) ""
+	$(ECHO) "    help      - print this help page."
 	$(ECHO) ""
 
 .PHONY: check
@@ -37,3 +40,7 @@ build:
 .PHONY: clean
 clean:
 	$(RM) -fr pkg
+
+.PHONY: git-clean
+git-clean:
+	$(GIT) clean -dxf
