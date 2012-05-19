@@ -1,7 +1,7 @@
 #/bin/sh
 #Configurations injected by install_server below....
 
-EXEC=/opt/redis/bin/redis
+EXEC=/opt/redis/bin/redis-server
 CLIEXEC=/opt/redis/bin/redis-cli
 PIDFILE=/var/run/redis_6379.pid
 CONF="/etc/redis/6379.conf"
