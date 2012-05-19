@@ -1,6 +1,6 @@
-# == Class: redis-server
+# == Class: redis
 #
-# Install and configure redis-server.
+# Install and configure redis.
 #
 # === Parameters
 #
@@ -9,8 +9,8 @@
 #   Default: /opt/redis-src
 #
 # [*redis_bin_dir*]
-#   Location to install redis-server binaries.
-#   Default: /opt/redis-server
+#   Location to install redis binaries.
+#   Default: /opt/redis
 #
 # [*redis_max_memory*]
 #   Set the redis config value maxmemory (bytes).
@@ -43,7 +43,7 @@
 #
 # === Examples
 #
-# include redis-server
+# include redis
 #
 # === Authors
 #
@@ -53,9 +53,9 @@
 #
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
-class redis-server (
+class redis (
   $redis_src_dir = '/opt/redis-src',
-  $redis_bin_dir = '/opt/redis-server',
+  $redis_bin_dir = '/opt/redis',
   $redis_max_memory = '4gb',
   $redis_max_clients = 0,           # 0 = unlimited
   $redis_timeout = 300,         # 0 = disabled
@@ -88,25 +88,25 @@ class redis-server (
     ensure => present,
     path   => $redis_pkg,
     mode   => '0644',
-    source => 'puppet:///modules/redis-server/redis-2.4.13.tar.gz',
+    source => 'puppet:///modules/redis/redis-2.4.13.tar.gz',
   }
   file { 'redis-init':
     ensure => present,
     path   => '/etc/init.d/redis_6379',
     mode   => '0755',
-    source => 'puppet:///modules/redis-server/redis.init',
+    source => 'puppet:///modules/redis/redis.init',
   }
   file { '6379.conf':
     ensure  => present,
     path    => '/etc/redis/6379.conf',
     mode    => '0644',
-    content => template('redis-server/6379.conf.erb'),
+    content => template('redis/6379.conf.erb'),
   }
   file { 'redis.conf':
     ensure => present,
     path   => '/etc/redis/redis.conf',
     mode   => '0644',
-    source => 'puppet:///modules/redis-server/redis.conf',
+    source => 'puppet:///modules/redis/redis.conf',
   }
   file { 'redis-cli-link':
     ensure => link,
@@ -132,7 +132,7 @@ class redis-server (
                  Package['build-essential'],
                  ],
   }
-  service { 'redis-server':
+  service { 'redis':
     ensure    => running,
     name      => 'redis_6379',
     enable    => true,

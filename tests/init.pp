@@ -1,4 +1,4 @@
 #
 # Smoke test.
 #
-include redis-server
+include redis

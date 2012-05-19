@@ -1,8 +1,8 @@
 #/bin/sh
 #Configurations injected by install_server below....
 
-EXEC=/opt/redis-server/bin/redis-server
-CLIEXEC=/opt/redis-server/bin/redis-cli
+EXEC=/opt/redis/bin/redis
+CLIEXEC=/opt/redis/bin/redis-cli
 PIDFILE=/var/run/redis_6379.pid
 CONF="/etc/redis/6379.conf"
 
@@ -64,14 +64,14 @@ status()
 {
     if [ ! -f $PIDFILE ]
     then
-	echo "$PIDFILE does not exist, redis-server is not running"
+	echo "$PIDFILE does not exist, redis is not running"
 	exit 3
     elif [ ! -x /proc/$(cat $PIDFILE) ]
     then
 	echo "$PIDFILE exists, process is not running though"
 	exit 1
     else
-	echo "redis-server is running with PID $(cat $PIDFILE)"
+	echo "redis is running with PID $(cat $PIDFILE)"
 	exit 0
     fi
 }

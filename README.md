@@ -1,9 +1,9 @@
-redis-server puppet module
+redis puppet module
 ==========================
 
-[![Build Status](https://secure.travis-ci.org/thomasvandoren/puppet-redis-server.png)](http://travis-ci.org/thomasvandoren/puppet-redis-server)
+[![Build Status](https://secure.travis-ci.org/thomasvandoren/puppet-redis.png)](http://travis-ci.org/thomasvandoren/puppet-redis)
 
-Install and configure redis-server.
+Install and configure redis.
 
 Authors
 -------
