@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 #Configurations injected by install_server below....
 
 EXEC=/opt/redis/bin/redis-server
