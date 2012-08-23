@@ -1,5 +1,5 @@
 name         'thomasvandoren-redis'
-version      '0.0.2'
+version      '0.0.3'
 author       'Thomas Van Doren'
 license      'The license the module is release under - generally GPLv2 or Apache'
 project_page 'https://github.com/thomasvandoren/puppet-redis'
