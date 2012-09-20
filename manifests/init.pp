@@ -41,6 +41,10 @@
 #   Set the redis config value slowlog-max-len.
 #   Default: 1024
 #
+# [*redis_password*]
+#   Password used by AUTH command. Will be setted is its not nil.
+#   Default: nil
+#
 # === Examples
 #
 # include redis
@@ -62,7 +66,8 @@ class redis (
   $redis_loglevel = 'notice',
   $redis_databases = 16,
   $redis_slowlog_log_slower_than = 10000, # microseconds
-  $redis_slowlog_max_len = 1024
+  $redis_slowlog_max_len = 1024,
+  $password
   ) {
   $redis_pkg = "${redis_src_dir}/redis-2.4.13.tar.gz"
 
