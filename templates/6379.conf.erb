@@ -146,7 +146,7 @@ slave-serve-stale-data yes
 # use a very strong password otherwise it will be very easy to break.
 #
 <% if password %>
-requirepass <%= password %>
+requirepass <%= redis_password %>
 <% end %>
 
 # Command renaming.
