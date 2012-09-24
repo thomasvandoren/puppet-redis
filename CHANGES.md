@@ -1,6 +1,10 @@
 redis module for puppet
 =======================
 
+0.0.4
+-----
+It's possible to configure a password to redis setup.
+
 0.0.3
 -----
 Fix init script.
