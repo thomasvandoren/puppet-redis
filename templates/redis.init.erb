@@ -2,7 +2,7 @@
 #Configurations injected by install_server below....
 
 EXEC=/opt/redis/bin/redis-server
-CLIEXEC=/opt/redis/bin/redis-cli
+CLIEXEC=/opt/redis/bin/redis-cli <%= redis_password ? "-a #{redis_password}" : '' %>
 PIDFILE=/var/run/redis_6379.pid
 CONF="/etc/redis/6379.conf"
 
@@ -64,31 +64,31 @@ status()
 {
     if [ ! -f $PIDFILE ]
     then
-	echo "$PIDFILE does not exist, redis is not running"
-	exit 3
+  echo "$PIDFILE does not exist, redis is not running"
+  exit 3
     elif [ ! -x /proc/$(cat $PIDFILE) ]
     then
-	echo "$PIDFILE exists, process is not running though"
-	exit 1
+  echo "$PIDFILE exists, process is not running though"
+  exit 1
     else
-	echo "redis is running with PID $(cat $PIDFILE)"
-	exit 0
+  echo "redis is running with PID $(cat $PIDFILE)"
+  exit 0
     fi
 }
 
 case "$1" in
     start)
-	start 
-	;;
+  start 
+  ;;
     stop)
-	stop
+  stop
         ;;
     restart)
-	restart
-	;;
+  restart
+  ;;
     status)
-	status
-	;;
+  status
+  ;;
     *)
         echo "Usage: $SCRIPTNAME {start|stop|restart|status}"
         ;;
