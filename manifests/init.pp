@@ -67,7 +67,7 @@ class redis (
   $redis_databases = 16,
   $redis_slowlog_log_slower_than = 10000, # microseconds
   $redis_slowlog_max_len = 1024,
-  $redis_password
+  $redis_password = false,
   ) {
   $redis_pkg = "${redis_src_dir}/redis-2.4.13.tar.gz"
 
