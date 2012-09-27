@@ -99,7 +99,7 @@ class redis (
     ensure => present,
     path   => '/etc/init.d/redis_6379',
     mode   => '0755',
-    source => 'puppet:///modules/redis/redis.init',
+    content => template('redis/redis.init.erb')
   }
   file { '6379.conf':
     ensure  => present,
