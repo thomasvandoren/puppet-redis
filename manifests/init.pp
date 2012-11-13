@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*version*]
+#   Version to install.
+#   Default: 2.4
+#
 # [*redis_src_dir*]
 #   Location to unpack source code before building and installing it.
 #   Default: /opt/redis-src
@@ -58,6 +62,7 @@
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
 class redis (
+  $version = '2.4',
   $redis_src_dir = '/opt/redis-src',
   $redis_bin_dir = '/opt/redis',
   $redis_max_memory = '4gb',
@@ -69,7 +74,19 @@ class redis (
   $redis_slowlog_max_len = 1024,
   $redis_password = false,
   ) {
-  $redis_pkg = "${redis_src_dir}/redis-2.4.13.tar.gz"
+  case $version {
+    '2.4': {
+      $real_version = '2.4.13'
+    }
+    '2.6': {
+      $real_version = '2.6.4'
+    }
+    default: {
+      fail("Invalid redis version, ${version}. Valid versions are: 2.4 and 2.6.")
+    }
+  }
+  $redis_pkg_name = "redis-${real_version}.tar.gz"
+  $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
   File {
     owner => root,
@@ -93,7 +110,7 @@ class redis (
     ensure => present,
     path   => $redis_pkg,
     mode   => '0644',
-    source => 'puppet:///modules/redis/redis-2.4.13.tar.gz',
+    source => 'puppet:///modules/redis/${redis_pkg_name}',
   }
   file { 'redis-init':
     ensure => present,
