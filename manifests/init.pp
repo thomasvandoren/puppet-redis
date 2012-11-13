@@ -56,6 +56,11 @@
 #
 # include redis
 #
+# class { 'redis':
+#   version          => '2.6',
+#   redis_max_memory => '64gb',
+# }
+#
 # === Authors
 #
 # Thomas Van Doren
