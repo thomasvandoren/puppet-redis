@@ -13,8 +13,8 @@ env:
   - PUPPET_VERSION=2.7.6
   - PUPPET_VERSION=2.6.9
 notifications:
-  email: false
+  email: thomas.vandoren@gmail.com
 gemfile: .gemfile
 matrix:
   allow_failures:
-    - env: PUPPET_VERSION=2.6.14
+    - env: PUPPET_VERSION=2.6.9
