@@ -9,10 +9,9 @@ describe 'redis', :type => 'class' do
         :osfamily  => 'Debian',
         :ipaddress => '10.0.0.1'
       }
-    end
+    end # let
 
     it do
-
       should contain_package('build-essential').with_ensure('present')
 
       should contain_file('/opt/redis-src').with(:ensure => 'directory')
@@ -47,10 +46,8 @@ describe 'redis', :type => 'class' do
       should contain_file('6379.conf').with_content(/hash-max-zipmap-value 64/)
       should_not contain_file('6379.conf').with_content(/hash-max-ziplist-entries 512/)
       should_not contain_file('6379.conf').with_content(/hash-max-ziplist-value 64/)
-
-    end
-
-  end
+    end # it
+  end # context
 
   context "On a Debian OS with non-default src and bin locations" do
 
@@ -59,17 +56,16 @@ describe 'redis', :type => 'class' do
         :osfamily  => 'Debian',
         :ipaddress => '10.0.0.1'
       }
-    end
+    end # let
 
     let :params do
       {
         :redis_src_dir => '/fake/path/to/redis-src',
         :redis_bin_dir => '/fake/path/to/redis'
       }
-    end
+    end # let
 
     it do
-
       should contain_package('build-essential').with_ensure('present')
 
       should contain_file('/fake/path/to/redis-src').with(:ensure => 'directory')
@@ -97,10 +93,8 @@ describe 'redis', :type => 'class' do
       should contain_service('redis').with(:ensure => 'running',
                                            :name   => 'redis_6379',
                                            :enable => true)
-
-    end
-
-  end
+    end # it
+  end # context
 
   context "On a Debian OS with version 2.6 param" do
 
@@ -109,16 +103,15 @@ describe 'redis', :type => 'class' do
         :osfamily  => 'Debian',
         :ipaddress => '10.0.0.1'
       }
-    end
+    end # let
 
     let :params do
       {
         :version => '2.6'
       }
-    end
+    end # let
 
     it do
-
       should contain_file('redis-pkg').with(:ensure => 'present',
                                             :path   => '/opt/redis-src/redis-2.6.4.tar.gz',
                                             :mode   => '0644',
@@ -132,10 +125,8 @@ describe 'redis', :type => 'class' do
       should contain_file('6379.conf').with_content(/hash-max-ziplist-value 64/)
       should_not contain_file('6379.conf').with_content(/hash-max-zipmap-entries 512/)
       should_not contain_file('6379.conf').with_content(/hash-max-zipmap-value 64/)
-
-    end
-
-  end
+    end # it
+  end # describe
 
   context "On non Debian systems" do
 
