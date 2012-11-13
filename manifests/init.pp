@@ -94,7 +94,7 @@ class redis (
     }
     '2.6': {
       $real_version = '2.6.4'
-      $real_redis_max_client = $redis_max_clients
+      $real_redis_max_clients = $redis_max_clients
     }
     default: {
       fail("Invalid redis version, ${version}. Valid versions are: 2.4 and 2.6.")
