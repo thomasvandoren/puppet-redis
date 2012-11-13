@@ -356,7 +356,7 @@ slowlog-max-len <%= redis_slowlog_max_len %>
 <% if version == '2.4' %>
 hash-max-zipmap-entries 512
 hash-max-zipmap-value 64
-<% elif version == '2.6' %>
+<% elsif version == '2.6' %>
 hash-max-ziplist-entries 512
 hash-max-ziplist-value 64
 <% end %>
