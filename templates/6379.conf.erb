@@ -174,7 +174,9 @@ requirepass <%= redis_password %>
 # an error 'max number of clients reached'.
 #
 # maxclients 128
-maxclients <%= redis_max_clients %>
+<% if real_redis_max_clients %>
+maxclients <%= real_redis_max_clients %>
+<% end %>
 
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys with an
@@ -351,8 +353,13 @@ slowlog-max-len <%= redis_slowlog_max_len %>
 # have at max a given numer of elements, and the biggest element does not
 # exceed a given threshold. You can configure this limits with the following
 # configuration directives.
+<% if version == '2.4' %>
 hash-max-zipmap-entries 512
 hash-max-zipmap-value 64
+<% elif version == '2.6' %>
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+<% end %>
 
 # Similarly to hashes, small lists are also encoded in a special way in order
 # to save a lot of space. The special representation is only used when

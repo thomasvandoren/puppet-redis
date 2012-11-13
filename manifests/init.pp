@@ -21,8 +21,11 @@
 #   Default: 4gb
 #
 # [*redis_max_clients*]
-#   Set the redis config value maxclients.
-#   Default: 0
+#   Set the redis config value maxclients. If no value provided, it is
+#   not included in the configuration for 2.6 and set to 0 (unlimited)
+#   for 2.4.
+#   Default: 0 (2.4)
+#   Default: nil (2.6)
 #
 # [*redis_timeout*]
 #   Set the redis config value timeout (seconds).
@@ -66,7 +69,7 @@ class redis (
   $redis_src_dir = '/opt/redis-src',
   $redis_bin_dir = '/opt/redis',
   $redis_max_memory = '4gb',
-  $redis_max_clients = 0,           # 0 = unlimited
+  $redis_max_clients = false,
   $redis_timeout = 300,         # 0 = disabled
   $redis_loglevel = 'notice',
   $redis_databases = 16,
@@ -74,9 +77,13 @@ class redis (
   $redis_slowlog_max_len = 1024,
   $redis_password = false,
   ) {
+  $real_redis_max_clients = false
   case $version {
     '2.4': {
       $real_version = '2.4.13'
+      if ($redis_max_clients == false) {
+        $real_redis_max_clients = 0
+      }
     }
     '2.6': {
       $real_version = '2.6.4'
@@ -110,7 +117,7 @@ class redis (
     ensure => present,
     path   => $redis_pkg,
     mode   => '0644',
-    source => 'puppet:///modules/redis/${redis_pkg_name}',
+    source => "puppet:///modules/redis/${redis_pkg_name}",
   }
   file { 'redis-init':
     ensure => present,
