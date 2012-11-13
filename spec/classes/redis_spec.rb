@@ -137,4 +137,17 @@ describe 'redis', :type => 'class' do
 
   end
 
-end
+  context "On non Debian systems" do
+
+    let :facts do
+      {
+        :osfamily  => 'RedHat',
+        :ipaddress => '10.0.0.1'
+      }
+    end # let
+
+    it do
+      expect { should raise_error(Puppet::Error) }
+    end # it
+  end # context
+end # describe
