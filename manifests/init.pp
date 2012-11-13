@@ -125,9 +125,9 @@ class redis (
     source => "puppet:///modules/redis/${redis_pkg_name}",
   }
   file { 'redis-init':
-    ensure => present,
-    path   => '/etc/init.d/redis_6379',
-    mode   => '0755',
+    ensure  => present,
+    path    => '/etc/init.d/redis_6379',
+    mode    => '0755',
     content => template('redis/redis.init.erb')
   }
   file { '6379.conf':
@@ -162,20 +162,13 @@ class redis (
     cwd     => $redis_src_dir,
     path    => '/bin:/usr/bin',
     unless  => "test $(${redis_bin_dir}/bin/redis-server --version | cut -d ' ' -f 1) = 'Redis'",
-    require => [ Exec['unpack-redis'],
-                 Package['build-essential'],
-                 ],
+    require => [ Exec['unpack-redis'], Package['build-essential'] ],
   }
   service { 'redis':
     ensure    => running,
     name      => 'redis_6379',
     enable    => true,
-    require   => [ File['6379.conf'],
-                   File['redis.conf'],
-                   File['redis-init'],
-                   File['redis-lib-port'],
-                   Exec['install-redis'],
-                   ],
+    require   => [ File['6379.conf'], File['redis.conf'], File['redis-init'], File['redis-lib-port'], Exec['install-redis'] ],
     subscribe => File['6379.conf'],
   }
 }
