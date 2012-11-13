@@ -128,6 +128,46 @@ describe 'redis', :type => 'class' do
     end # it
   end # describe
 
+  context "On Debian systems with no password parameter" do
+
+    let :facts do
+      {
+        :osfamily  => 'Debian',
+        :ipaddress => '10.0.0.1'
+      }
+    end # let
+
+    let :params do
+      {
+        :redis_password => false
+      }
+    end # let
+
+    it do
+      should_not contain_file('6379.conf').with_content(/^requirepass/)
+    end # it
+  end # context
+
+  context "On Debian systems with password parameter" do
+
+    let :facts do
+      {
+        :osfamily  => 'Debian',
+        :ipaddress => '10.0.0.1'
+      }
+    end # let
+
+    let :params do
+      {
+        :redis_password => 'ThisIsAReallyBigSecret'
+      }
+    end # let
+
+    it do
+      should contain_file('6379.conf').with_content(/^requirepass ThisIsAReallyBigSecret/)
+    end # it
+  end # context
+
   context "On non Debian systems" do
 
     let :facts do
