@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*version*]
+#   Version to install.
+#   Default: 2.4
+#
 # [*redis_src_dir*]
 #   Location to unpack source code before building and installing it.
 #   Default: /opt/redis-src
@@ -17,8 +21,11 @@
 #   Default: 4gb
 #
 # [*redis_max_clients*]
-#   Set the redis config value maxclients.
-#   Default: 0
+#   Set the redis config value maxclients. If no value provided, it is
+#   not included in the configuration for 2.6 and set to 0 (unlimited)
+#   for 2.4.
+#   Default: 0 (2.4)
+#   Default: nil (2.6)
 #
 # [*redis_timeout*]
 #   Set the redis config value timeout (seconds).
@@ -49,6 +56,11 @@
 #
 # include redis
 #
+# class { 'redis':
+#   version          => '2.6',
+#   redis_max_memory => '64gb',
+# }
+#
 # === Authors
 #
 # Thomas Van Doren
@@ -58,10 +70,11 @@
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
 class redis (
+  $version = '2.4',
   $redis_src_dir = '/opt/redis-src',
   $redis_bin_dir = '/opt/redis',
   $redis_max_memory = '4gb',
-  $redis_max_clients = 0,           # 0 = unlimited
+  $redis_max_clients = false,
   $redis_timeout = 300,         # 0 = disabled
   $redis_loglevel = 'notice',
   $redis_databases = 16,
@@ -69,7 +82,26 @@ class redis (
   $redis_slowlog_max_len = 1024,
   $redis_password = false,
   ) {
-  $redis_pkg = "${redis_src_dir}/redis-2.4.13.tar.gz"
+  case $version {
+    '2.4': {
+      $real_version = '2.4.13'
+      if ($redis_max_clients == false) {
+        $real_redis_max_clients = 0
+      }
+      else {
+        $real_redis_max_clients = $redis_max_clients
+      }
+    }
+    '2.6': {
+      $real_version = '2.6.4'
+      $real_redis_max_clients = $redis_max_clients
+    }
+    default: {
+      fail("Invalid redis version, ${version}. Valid versions are: 2.4 and 2.6.")
+    }
+  }
+  $redis_pkg_name = "redis-${real_version}.tar.gz"
+  $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
   File {
     owner => root,
@@ -93,7 +125,7 @@ class redis (
     ensure => present,
     path   => $redis_pkg,
     mode   => '0644',
-    source => 'puppet:///modules/redis/redis-2.4.13.tar.gz',
+    source => "puppet:///modules/redis/${redis_pkg_name}",
   }
   file { 'redis-init':
     ensure  => present,

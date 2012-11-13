@@ -1,6 +1,8 @@
 redis module for puppet
 =======================
 
+Add option to install 2.6.
+
 0.0.4
 -----
 It's possible to configure a password to redis setup.
