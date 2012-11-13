@@ -15,7 +15,6 @@ describe 'redis', :type => 'class' do
 
       should contain_package('build-essential').with_ensure('present')
 
-      # add redis_src_dir file
       should contain_file('/opt/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
       should contain_file('redis-lib').with(:ensure => 'directory',
@@ -42,6 +41,13 @@ describe 'redis', :type => 'class' do
                                            :name   => 'redis_6379',
                                            :enable => true)
 
+      # These values were changed in 2.6.
+      should contain_file('6379.conf').with_content(/maxclients 0/)
+      should contain_file('6379.conf').with_content(/hash-max-zipmap-entries 512/)
+      should contain_file('6379.conf').with_content(/hash-max-zipmap-value 64/)
+      should_not contain_file('6379.conf').with_content(/hash-max-ziplist-entries 512/)
+      should_not contain_file('6379.conf').with_content(/hash-max-ziplist-value 64/)
+
     end
 
   end
@@ -66,7 +72,6 @@ describe 'redis', :type => 'class' do
 
       should contain_package('build-essential').with_ensure('present')
 
-      # add redis_src_dir file
       should contain_file('/fake/path/to/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
       should contain_file('redis-lib').with(:ensure => 'directory',
@@ -92,6 +97,41 @@ describe 'redis', :type => 'class' do
       should contain_service('redis').with(:ensure => 'running',
                                            :name   => 'redis_6379',
                                            :enable => true)
+
+    end
+
+  end
+
+  context "On a Debian OS with version 2.6 param" do
+
+    let :facts do
+      {
+        :osfamily  => 'Debian',
+        :ipaddress => '10.0.0.1'
+      }
+    end
+
+    let :params do
+      {
+        :version => '2.6'
+      }
+    end
+
+    it do
+
+      should contain_file('redis-pkg').with(:ensure => 'present',
+                                            :path   => '/opt/redis-src/redis-2.6.4.tar.gz',
+                                            :mode   => '0644',
+                                            :source => 'puppet:///modules/redis/redis-2.6.4.tar.gz')
+
+      # Maxclients is left out for 2.6 unless it is explicitly set.
+      should_not contain_file('6379.conf').with_content(/maxclients 0/)
+
+      # These params were renamed b/w 2.4 and 2.6.
+      should contain_file('6379.conf').with_content(/hash-max-ziplist-entries 512/)
+      should contain_file('6379.conf').with_content(/hash-max-ziplist-value 64/)
+      should_not contain_file('6379.conf').with_content(/hash-max-zipmap-entries 512/)
+      should_not contain_file('6379.conf').with_content(/hash-max-zipmap-value 64/)
 
     end
 
