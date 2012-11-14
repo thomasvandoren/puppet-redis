@@ -1,7 +1,10 @@
 redis module for puppet
 =======================
 
+0.0.5
+-----
 Add option to install 2.6.
+Add spec tests.
 
 0.0.4
 -----
