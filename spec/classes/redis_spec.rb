@@ -13,6 +13,7 @@ describe 'redis', :type => 'class' do
 
     it do
       should contain_package('build-essential').with_ensure('present')
+      should contain_package('wget').with_ensure('present')
 
       should contain_file('/opt/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
@@ -24,6 +25,7 @@ describe 'redis', :type => 'class' do
                                             :path   => '/opt/redis-src/redis-2.4.13.tar.gz',
                                             :mode   => '0644',
                                             :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz')
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.4\.13\.tar\.gz/)
       should contain_file('redis-init').with(:ensure => 'present',
                                              :path   => '/etc/init.d/redis_6379',
                                              :mode   => '0755')
@@ -67,6 +69,7 @@ describe 'redis', :type => 'class' do
 
     it do
       should contain_package('build-essential').with_ensure('present')
+      should contain_package('wget').with_ensure('present')
 
       should contain_file('/fake/path/to/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
@@ -107,15 +110,13 @@ describe 'redis', :type => 'class' do
 
     let :params do
       {
-        :version => '2.6'
+        :version => '2.6.4'
       }
     end # let
 
     it do
-      should contain_file('redis-pkg').with(:ensure => 'present',
-                                            :path   => '/opt/redis-src/redis-2.6.4.tar.gz',
-                                            :mode   => '0644',
-                                            :source => 'puppet:///modules/redis/redis-2.6.4.tar.gz')
+      should_not contain_file('redis-pkg')
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.6\.4\.tar\.gz/)
 
       # Maxclients is left out for 2.6 unless it is explicitly set.
       should_not contain_file('6379.conf').with_content(/maxclients 0/)
@@ -168,12 +169,17 @@ describe 'redis', :type => 'class' do
     end # it
   end # context
 
-  context "On non Debian systems" do
+  context "With an invalid version param." do
 
     let :facts do
       {
-        :osfamily  => 'RedHat',
         :ipaddress => '10.0.0.1'
+      }
+    end # let
+
+    let :params do
+      {
+        :version => 'bad version'
       }
     end # let
 
