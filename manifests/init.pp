@@ -6,7 +6,7 @@
 #
 # [*version*]
 #   Version to install.
-#   Default: 2.4
+#   Default: 2.4.13
 #
 # [*redis_src_dir*]
 #   Location to unpack source code before building and installing it.
@@ -57,7 +57,7 @@
 # include redis
 #
 # class { 'redis':
-#   version          => '2.6',
+#   version          => '2.6.4',
 #   redis_max_memory => '64gb',
 # }
 #
@@ -70,7 +70,7 @@
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
 class redis (
-  $version = '2.4',
+  $version = '2.4.13',
   $redis_src_dir = '/opt/redis-src',
   $redis_bin_dir = '/opt/redis',
   $redis_max_memory = '4gb',
@@ -83,8 +83,7 @@ class redis (
   $redis_password = false,
   ) {
   case $version {
-    '2.4': {
-      $real_version = '2.4.13'
+    /^2\.4\.\d+$/: {
       if ($redis_max_clients == false) {
         $real_redis_max_clients = 0
       }
@@ -92,16 +91,19 @@ class redis (
         $real_redis_max_clients = $redis_max_clients
       }
     }
-    '2.6': {
-      $real_version = '2.6.4'
+    /^2\.6\.\d+$/: {
       $real_redis_max_clients = $redis_max_clients
     }
     default: {
-      fail("Invalid redis version, ${version}. Valid versions are: 2.4 and 2.6.")
+      fail("Invalid redis version, ${version}. It must match 2.4.\d+ or 2.6.\d+.")
     }
   }
-  $redis_pkg_name = "redis-${real_version}.tar.gz"
+  $redis_pkg_name = "redis-${version}.tar.gz"
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
+
+  package { ['build-essential', 'wget']:
+    ensure => present,
+  }
 
   File {
     owner => root,
@@ -121,11 +123,21 @@ class redis (
     ensure => directory,
     path   => '/var/lib/redis/6379',
   }
-  file { 'redis-pkg':
-    ensure => present,
-    path   => $redis_pkg,
-    mode   => '0644',
-    source => "puppet:///modules/redis/${redis_pkg_name}",
+
+  # If the version is 2.4.13, use the tarball that ships with the
+  # module.
+  if ($version == '2.4.13') {
+    file { 'redis-pkg':
+      ensure => present,
+      path   => $redis_pkg,
+      mode   => '0644',
+      source => 'puppet:///modules/redis/redis-2.4.13.tar.gz',
+    }
+  }
+  exec { 'get-redis-pkg':
+    command => "/usr/bin/wget --output-document ${redis_pkg} http://redis.googlecode.com/files/${redis_pkg_name}",
+    unless  => "/usr/bin/test -f ${redis_pkg}",
+    require => File[$redis_src_dir],
   }
   file { 'redis-init':
     ensure  => present,
@@ -150,15 +162,13 @@ class redis (
     path   => '/usr/local/bin/redis-cli',
     target => "${redis_bin_dir}/bin/redis-cli",
   }
-  package { 'build-essential':
-    ensure => present,
-  }
+
   exec { 'unpack-redis':
     command => "tar --strip-components 1 -xzf ${redis_pkg}",
     cwd     => $redis_src_dir,
     path    => '/bin:/usr/bin',
     unless  => "test -f ${redis_src_dir}/Makefile",
-    require => File['redis-pkg'],
+    require => Exec['get-redis-pkg'],
   }
   exec { 'install-redis':
     command => "make && make install PREFIX=${redis_bin_dir}",
@@ -167,6 +177,7 @@ class redis (
     unless  => "test $(${redis_bin_dir}/bin/redis-server --version | cut -d ' ' -f 1) = 'Redis'",
     require => [ Exec['unpack-redis'], Package['build-essential'] ],
   }
+
   service { 'redis':
     ensure    => running,
     name      => 'redis_6379',
