@@ -43,11 +43,14 @@ describe 'redis', :type => 'class' do
                                            :enable => true)
 
       # These values were changed in 2.6.
-      should contain_file('6379.conf').with_content(/maxclients 0/)
-      should contain_file('6379.conf').with_content(/hash-max-zipmap-entries 512/)
-      should contain_file('6379.conf').with_content(/hash-max-zipmap-value 64/)
-      should_not contain_file('6379.conf').with_content(/hash-max-ziplist-entries 512/)
-      should_not contain_file('6379.conf').with_content(/hash-max-ziplist-value 64/)
+      should contain_file('redis_port.conf').with_content(/maxclients 0/)
+      should contain_file('redis_port.conf').with_content(/hash-max-zipmap-entries 512/)
+      should contain_file('redis_port.conf').with_content(/hash-max-zipmap-value 64/)
+      should_not contain_file('redis_port.conf').with_content(/hash-max-ziplist-entries 512/)
+      should_not contain_file('redis_port.conf').with_content(/hash-max-ziplist-value 64/)
+
+      # The bind config should not be present by default.
+      should_not contain_file('redis_port.conf').with_content(/bind \d+\.\d+\.\d+\.\d+/)
     end # it
   end # context
 
@@ -119,15 +122,15 @@ describe 'redis', :type => 'class' do
       should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.6\.4\.tar\.gz/)
 
       # Maxclients is left out for 2.6 unless it is explicitly set.
-      should_not contain_file('6379.conf').with_content(/maxclients 0/)
+      should_not contain_file('redis_port.conf').with_content(/maxclients 0/)
 
       # These params were renamed b/w 2.4 and 2.6.
-      should contain_file('6379.conf').with_content(/hash-max-ziplist-entries 512/)
-      should contain_file('6379.conf').with_content(/hash-max-ziplist-value 64/)
-      should_not contain_file('6379.conf').with_content(/hash-max-zipmap-entries 512/)
-      should_not contain_file('6379.conf').with_content(/hash-max-zipmap-value 64/)
+      should contain_file('redis_port.conf').with_content(/hash-max-ziplist-entries 512/)
+      should contain_file('redis_port.conf').with_content(/hash-max-ziplist-value 64/)
+      should_not contain_file('redis_port.conf').with_content(/hash-max-zipmap-entries 512/)
+      should_not contain_file('redis_port.conf').with_content(/hash-max-zipmap-value 64/)
     end # it
-  end # describe
+  end # context
 
   context "On Debian systems with no password parameter" do
 
@@ -145,7 +148,7 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
-      should_not contain_file('6379.conf').with_content(/^requirepass/)
+      should_not contain_file('redis_port.conf').with_content(/^requirepass/)
     end # it
   end # context
 
@@ -165,7 +168,34 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
-      should contain_file('6379.conf').with_content(/^requirepass ThisIsAReallyBigSecret/)
+      should contain_file('redis_port.conf').with_content(/^requirepass ThisIsAReallyBigSecret/)
+    end # it
+  end # context
+
+  context "With a non-default port parameter" do
+    let :params do
+      {
+        :redis_port => '6900'
+      }
+    end # let
+
+    it do
+      should contain_file('redis_port.conf').with_content(/^port 6900$/)
+      should contain_file('redis_port.conf').with_content(/^pidfile \/var\/run\/redis_6900\.pid$/)
+      should contain_file('redis_port.conf').with_content(/^logfile \/var\/log\/redis_6900\.log$/)
+      should contain_file('redis_port.conf').with_content(/^dir \/var\/lib\/redis\/6900$/)
+    end # it
+  end # context
+
+  context "With a non default bind address" do
+    let :params do
+      {
+        :redis_bind_address => '10.1.2.3'
+      }
+    end # let
+
+    it do
+      should contain_file('redis_port.conf').with_content(/^bind 10\.1\.2\.3$/)
     end # it
   end # context
 

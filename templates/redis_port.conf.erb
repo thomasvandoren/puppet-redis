@@ -24,8 +24,6 @@ port <%= redis_port %>
 
 # If you want you can bind a single interface, if the bind option is not
 # specified all the interfaces will listen for incoming connections.
-#
-# bind 127.0.0.1
 <% if redis_bind_address %>
 bind <%= redis_bind_address %>
 <% end %>
