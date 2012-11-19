@@ -1,6 +1,10 @@
 redis module for puppet
 =======================
 
+0.0.6
+-----
+Add support for installing any available version.
+
 0.0.5
 -----
 Add option to install 2.6.
