@@ -11,4 +11,4 @@ Thomas Van Doren
 
 License
 -------
-GPLv2
+BSD
