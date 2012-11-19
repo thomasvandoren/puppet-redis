@@ -4,6 +4,14 @@
 #
 # === Parameters
 #
+# [*redis_port*]
+#   Accept redis connections on this port.
+#   Default: 6379
+#
+# [*redis_bind_address*]
+#   Address to bind to.
+#   Default: false, which binds to all interfaces
+#
 # [*version*]
 #   Version to install.
 #   Default: 2.4.13
@@ -70,6 +78,8 @@
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
 class redis (
+  $redis_port = '6379',
+  $redis_bind_address = false,
   $version = '2.4.13',
   $redis_src_dir = '/opt/redis-src',
   $redis_bin_dir = '/opt/redis',
@@ -121,7 +131,7 @@ class redis (
   }
   file { 'redis-lib-port':
     ensure => directory,
-    path   => '/var/lib/redis/6379',
+    path   => "/var/lib/redis/${redis_port}",
   }
 
   # If the version is 2.4.13, use the tarball that ships with the
@@ -141,15 +151,15 @@ class redis (
   }
   file { 'redis-init':
     ensure  => present,
-    path    => '/etc/init.d/redis_6379',
+    path    => "/etc/init.d/redis_${redis_port}",
     mode    => '0755',
     content => template('redis/redis.init.erb')
   }
-  file { '6379.conf':
+  file { 'redis_port.conf':
     ensure  => present,
-    path    => '/etc/redis/6379.conf',
+    path    => "/etc/redis/${redis_port}.conf",
     mode    => '0644',
-    content => template('redis/6379.conf.erb'),
+    content => template('redis/redis_port.conf.erb'),
   }
   file { 'redis.conf':
     ensure => present,
@@ -180,9 +190,9 @@ class redis (
 
   service { 'redis':
     ensure    => running,
-    name      => 'redis_6379',
+    name      => "redis_${redis_port}",
     enable    => true,
-    require   => [ File['6379.conf'], File['redis.conf'], File['redis-init'], File['redis-lib-port'], Exec['install-redis'] ],
-    subscribe => File['6379.conf'],
+    require   => [ File['redis_port.conf'], File['redis.conf'], File['redis-init'], File['redis-lib-port'], Exec['install-redis'] ],
+    subscribe => File['redis_port.conf'],
   }
 }

@@ -1,23 +1,23 @@
 #!/bin/sh
 #Configurations injected by install_server below....
 
-EXEC=/opt/redis/bin/redis-server
-CLIEXEC=/opt/redis/bin/redis-cli <%= redis_password ? "-a #{redis_password}" : '' %>
-PIDFILE=/var/run/redis_6379.pid
-CONF="/etc/redis/6379.conf"
+REDISPORT="<%= redis_port %>"
 
-REDISPORT="6379"
+EXEC=<%= redis_bin_dir %>/bin/redis-server
+CLIEXEC=<%= redis_bin_dir %>/bin/redis-cli <%= redis_password ? "-a #{redis_password}" : '' %>
+PIDFILE="/var/run/redis_${REDISPORT}.pid"
+CONF="/etc/redis/${REDISPORT}.conf"
 
 ###############
 
-# description: redis_6379 is the redis daemon.
+# description: redis_<%= redis_port %> is the redis daemon.
 ### BEGIN INIT INFO
-# Provides: redis_6379
+# Provides: redis_<%= redis_port %>
 # Required-Start: 
 # Required-Stop: 
 # Should-Start: 
 # Should-Stop: 
-# Short-Description: start and stop redis_6379
+# Short-Description: start and stop redis_<%= redis_port %>
 # Description: Redis daemon
 ### END INIT INFO
 
