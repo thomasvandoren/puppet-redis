@@ -6,8 +6,7 @@ describe 'redis', :type => 'class' do
 
     let :facts do
       {
-        :osfamily  => 'Debian',
-        :ipaddress => '10.0.0.1'
+        :osfamily  => 'Debian'
       }
     end # let
 
@@ -58,8 +57,7 @@ describe 'redis', :type => 'class' do
 
     let :facts do
       {
-        :osfamily  => 'Debian',
-        :ipaddress => '10.0.0.1'
+        :osfamily  => 'Debian'
       }
     end # let
 
@@ -106,8 +104,7 @@ describe 'redis', :type => 'class' do
 
     let :facts do
       {
-        :osfamily  => 'Debian',
-        :ipaddress => '10.0.0.1'
+        :osfamily  => 'Debian'
       }
     end # let
 
@@ -136,8 +133,7 @@ describe 'redis', :type => 'class' do
 
     let :facts do
       {
-        :osfamily  => 'Debian',
-        :ipaddress => '10.0.0.1'
+        :osfamily  => 'Debian'
       }
     end # let
 
@@ -156,8 +152,7 @@ describe 'redis', :type => 'class' do
 
     let :facts do
       {
-        :osfamily  => 'Debian',
-        :ipaddress => '10.0.0.1'
+        :osfamily  => 'Debian'
       }
     end # let
 
@@ -200,13 +195,6 @@ describe 'redis', :type => 'class' do
   end # context
 
   context "With an invalid version param." do
-
-    let :facts do
-      {
-        :ipaddress => '10.0.0.1'
-      }
-    end # let
-
     let :params do
       {
         :version => 'bad version'
