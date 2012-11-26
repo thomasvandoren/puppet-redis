@@ -1,6 +1,10 @@
 redis module for puppet
 =======================
 
+0.0.8
+-----
+Fix init script when redis_bind_address is not defined (the default).
+
 0.0.7
 -----
 Add support for parameterized listening port and bind address.
