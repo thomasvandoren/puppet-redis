@@ -2,7 +2,7 @@
 #Configurations injected by install_server below....
 
 REDIS_PORT="<%= redis_port %>"
-REDIS_BIND_ADDRESS="<%= redis_bind_address %>"
+REDIS_BIND_ADDRESS="<%= redis_bind_address ? redis_bind_address : '127.0.0.1' %>"
 
 EXEC=<%= redis_bin_dir %>/bin/redis-server
 CLIEXEC="<%= redis_bin_dir %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= redis_password ? '-a ' + redis_password : '' %>"

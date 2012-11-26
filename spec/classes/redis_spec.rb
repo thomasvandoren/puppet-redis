@@ -41,6 +41,7 @@ describe 'redis', :type => 'class' do
       should contain_file('redis-init').with(:ensure => 'present',
                                              :path   => '/etc/init.d/redis_6379',
                                              :mode   => '0755')
+      should contain_file('redis-init').with_content(/^REDIS_BIND_ADDRESS="127.0.0.1"$/)
       should contain_file('redis-init').with_content(/^CLIEXEC="\/opt\/redis\/bin\/redis-cli -h \$REDIS_BIND_ADDRESS -p \$REDIS_PORT/)
 
       # These values were changed in 2.6.
