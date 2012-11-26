@@ -153,7 +153,8 @@ class redis (
     ensure  => present,
     path    => "/etc/init.d/redis_${redis_port}",
     mode    => '0755',
-    content => template('redis/redis.init.erb')
+    content => template('redis/redis.init.erb'),
+    notify  => Service['redis'],
   }
   file { 'redis_port.conf':
     ensure  => present,

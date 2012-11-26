@@ -1,12 +1,13 @@
 #!/bin/sh
 #Configurations injected by install_server below....
 
-REDISPORT="<%= redis_port %>"
+REDIS_PORT="<%= redis_port %>"
+REDIS_BIND_ADDRESS="<%= redis_bind_address %>"
 
 EXEC=<%= redis_bin_dir %>/bin/redis-server
-CLIEXEC=<%= redis_bin_dir %>/bin/redis-cli <%= redis_password ? "-a #{redis_password}" : '' %>
-PIDFILE="/var/run/redis_${REDISPORT}.pid"
-CONF="/etc/redis/${REDISPORT}.conf"
+CLIEXEC="<%= redis_bin_dir %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= redis_password ? '-a #{redis_password}' : '' %>"
+PIDFILE="/var/run/redis_${REDIS_PORT}.pid"
+CONF="/etc/redis/${REDIS_PORT}.conf"
 
 ###############
 
@@ -42,7 +43,7 @@ stop()
     else
         PID=$(cat $PIDFILE)
         echo "Stopping ..."
-        $CLIEXEC -p $REDISPORT shutdown
+        $CLIEXEC shutdown
         while [ -x /proc/${PID} ]
         do
             echo "Waiting for Redis to shutdown ..."
