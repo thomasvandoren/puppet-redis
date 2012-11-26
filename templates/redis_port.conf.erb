@@ -16,16 +16,17 @@ daemonize yes
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
-pidfile /var/run/redis_6379.pid
+pidfile /var/run/redis_<%= redis_port %>.pid
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port 6379
+port <%= redis_port %>
 
 # If you want you can bind a single interface, if the bind option is not
 # specified all the interfaces will listen for incoming connections.
-#
-# bind 127.0.0.1
+<% if redis_bind_address %>
+bind <%= redis_bind_address %>
+<% end %>
 
 # Specify the path for the unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
@@ -47,7 +48,7 @@ loglevel <%= redis_loglevel %>
 # Specify the log file name. Also 'stdout' can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile /var/log/redis_6379.log
+logfile /var/log/redis_<%= redis_port %>.log
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -101,7 +102,7 @@ dbfilename dump.rdb
 # Also the Append Only File will be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir /var/lib/redis/6379
+dir /var/lib/redis/<%= redis_port %>
 
 ################################# REPLICATION #################################
 
