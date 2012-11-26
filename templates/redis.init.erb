@@ -26,7 +26,7 @@ set -e
 
 start()
 {
-    if [ -f $PIDFILE ]
+    if [ -x $PIDFILE ]
     then
         echo "$PIDFILE exists, process is already running or crashed"
     else
@@ -43,7 +43,7 @@ stop()
     else
         PID=$(cat $PIDFILE)
         echo "Stopping ..."
-        $CLIEXEC shutdown
+        $CLIEXEC shutdown || /bin/true
         while [ -x /proc/${PID} ]
         do
             echo "Waiting for Redis to shutdown ..."
