@@ -25,9 +25,6 @@ describe 'redis', :type => 'class' do
                                             :mode   => '0644',
                                             :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz')
       should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.4\.13\.tar\.gz/)
-      should contain_file('redis-init').with(:ensure => 'present',
-                                             :path   => '/etc/init.d/redis_6379',
-                                             :mode   => '0755')
       should contain_file('redis-cli-link').with(:ensure => 'link',
                                                  :path   => '/usr/local/bin/redis-cli',
                                                  :target => '/opt/redis/bin/redis-cli')
@@ -40,6 +37,11 @@ describe 'redis', :type => 'class' do
       should contain_service('redis').with(:ensure => 'running',
                                            :name   => 'redis_6379',
                                            :enable => true)
+
+      should contain_file('redis-init').with(:ensure => 'present',
+                                             :path   => '/etc/init.d/redis_6379',
+                                             :mode   => '0755')
+      should contain_file('redis-init').with_content(/^CLIEXEC="\/opt\/redis\/bin\/redis-cli -h \$REDIS_BIND_ADDRESS -p \$REDIS_PORT/)
 
       # These values were changed in 2.6.
       should contain_file('redis_port.conf').with_content(/maxclients 0/)
@@ -164,6 +166,7 @@ describe 'redis', :type => 'class' do
 
     it do
       should contain_file('redis_port.conf').with_content(/^requirepass ThisIsAReallyBigSecret/)
+      should contain_file('redis-init').with_content(/^CLIEXEC="[\w\/]+redis-cli -h \$REDIS_BIND_ADDRESS -p \$REDIS_PORT -a ThisIsAReallyBigSecret/)
     end # it
   end # context
 
@@ -179,6 +182,7 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port.conf').with_content(/^pidfile \/var\/run\/redis_6900\.pid$/)
       should contain_file('redis_port.conf').with_content(/^logfile \/var\/log\/redis_6900\.log$/)
       should contain_file('redis_port.conf').with_content(/^dir \/var\/lib\/redis\/6900$/)
+      should contain_file('redis-init').with_content(/^REDIS_PORT="6900"$/)
     end # it
   end # context
 
@@ -191,6 +195,7 @@ describe 'redis', :type => 'class' do
 
     it do
       should contain_file('redis_port.conf').with_content(/^bind 10\.1\.2\.3$/)
+      should contain_file('redis-init').with_content(/^REDIS_BIND_ADDRESS="10.1.2.3"$/)
     end # it
   end # context
 
