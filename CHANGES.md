@@ -1,6 +1,8 @@
 redis module for puppet
 =======================
 
+0.0.7
+-----
 Add support for parameterized listening port and bind address.
 
 0.0.6
