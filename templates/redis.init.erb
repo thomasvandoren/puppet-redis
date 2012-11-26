@@ -5,7 +5,7 @@ REDIS_PORT="<%= redis_port %>"
 REDIS_BIND_ADDRESS="<%= redis_bind_address %>"
 
 EXEC=<%= redis_bin_dir %>/bin/redis-server
-CLIEXEC="<%= redis_bin_dir %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= redis_password ? '-a #{redis_password}' : '' %>"
+CLIEXEC="<%= redis_bin_dir %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= redis_password ? '-a ' + redis_password : '' %>"
 PIDFILE="/var/run/redis_${REDIS_PORT}.pid"
 CONF="/etc/redis/${REDIS_PORT}.conf"
 
