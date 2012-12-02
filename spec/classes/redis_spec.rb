@@ -11,8 +11,8 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
-      should contain_package('build-essential').with_ensure('present')
-      should contain_package('wget').with_ensure('present')
+      should include_class('gcc')
+      should include_class('wget')
 
       should contain_file('/opt/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
@@ -72,8 +72,8 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
-      should contain_package('build-essential').with_ensure('present')
-      should contain_package('wget').with_ensure('present')
+      should include_class('gcc')
+      should include_class('wget')
 
       should contain_file('/fake/path/to/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
