@@ -1,6 +1,10 @@
 redis module for puppet
 =======================
 
+0.0.9
+-----
+Use maestrodev/wget and puppetlabs/gcc to replace some common package dependencies. - @garethr
+
 0.0.8
 -----
 Fix init script when redis_bind_address is not defined (the default).
