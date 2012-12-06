@@ -92,6 +92,10 @@ class redis (
   $redis_slowlog_max_len = 1024,
   $redis_password = false
   ) {
+
+  include wget
+  include gcc
+
   case $version {
     /^2\.4\.\d+$/: {
       if ($redis_max_clients == false) {
@@ -110,10 +114,6 @@ class redis (
   }
   $redis_pkg_name = "redis-${version}.tar.gz"
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
-
-  package { ['build-essential', 'wget']:
-    ensure => present,
-  }
 
   File {
     owner => root,
@@ -186,7 +186,7 @@ class redis (
     cwd     => $redis_src_dir,
     path    => '/bin:/usr/bin',
     unless  => "test $(${redis_bin_dir}/bin/redis-server --version | cut -d ' ' -f 1) = 'Redis'",
-    require => [ Exec['unpack-redis'], Package['build-essential'] ],
+    require => [ Exec['unpack-redis'], Class['gcc'] ],
   }
 
   service { 'redis':
