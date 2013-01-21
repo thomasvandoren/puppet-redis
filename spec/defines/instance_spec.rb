@@ -32,8 +32,8 @@ describe 'redis::instance', :type => 'define' do
 
     let :params do
       {
-        :redis_port => '6900'
-        :redis_password => 'ThisIsAReallyBigSecret',
+        :redis_port     => '6900',
+        :redis_password => 'ThisIsAReallyBigSecret'
       }
     end # let
 
