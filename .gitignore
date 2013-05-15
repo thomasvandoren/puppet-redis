@@ -5,3 +5,4 @@
 
 # puppet-module build artifacts
 /pkg
+/.gemfile.lock
