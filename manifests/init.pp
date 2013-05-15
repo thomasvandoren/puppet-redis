@@ -38,7 +38,7 @@ class redis (
   $version = $redis::params::version,
   $redis_src_dir = $redis::params::redis_src_dir,
   $redis_bin_dir = $redis::params::redis_bin_dir
-) inherits redis::params {
+  ) inherits redis::params {
 
   include wget
   include gcc
