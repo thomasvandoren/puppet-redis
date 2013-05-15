@@ -19,7 +19,7 @@ class redis::params {
   $version = '2.4.13'
   $redis_src_dir = '/opt/redis-src'
   $redis_bin_dir = '/opt/redis'
-  $redis_max_memory = '4gb'
+  $redis_max_memory = to_bytes($::memorytotal) / 2  # Default is half total memory
   $redis_max_clients = false
   $redis_timeout = 300         # 0 = disabled
   $redis_loglevel = 'notice'
