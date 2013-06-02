@@ -81,10 +81,13 @@ databases <%= @redis_databases %>
 #
 #   Note: you can disable saving at all commenting all the save lines.
 
-save 900 1
+save 600 1
 save 300 10
 save 60 10000
 
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
 # Compress string objects using LZF when dump .rdb databases?
 # For default that's set to 'yes' as it's almost always a win.
 # If you want to save some CPU in the saving child set it to 'no' but
@@ -132,6 +135,8 @@ dir /var/lib/redis/<%= @redis_port %>
 #    but to INFO and SLAVEOF.
 #
 slave-serve-stale-data yes
+
+slave-read-only no
 
 ################################## SECURITY ###################################
 
@@ -322,7 +327,7 @@ auto-aof-rewrite-min-size 64mb
 # Max execution time of a Lua script in milliseconds.
 # This prevents that a programming error generating an infinite loop will block
 # your server forever. Set it to 0 or a negative value for unlimited execution.
-#lua-time-limit 60000
+lua-time-limit 60000
 
 ################################## SLOW LOG ###################################
 
@@ -410,3 +415,7 @@ activerehashing yes
 #
 # include /path/to/local.conf
 # include /path/to/other.conf
+
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60

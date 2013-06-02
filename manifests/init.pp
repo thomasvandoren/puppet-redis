@@ -37,7 +37,8 @@
 class redis (
   $version = $redis::params::version,
   $redis_src_dir = $redis::params::redis_src_dir,
-  $redis_bin_dir = $redis::params::redis_bin_dir
+  $redis_bin_dir = $redis::params::redis_bin_dir,
+  $default_instance = $redis::params::default_instance,
 ) inherits redis::params {
 
   include wget
@@ -47,7 +48,9 @@ class redis (
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
   # Install default instance
-  redis::instance { 'redis-default': }
+  if default_instance {
+    redis::instance { 'redis-default': }
+  }
 
   File {
     owner => root,
