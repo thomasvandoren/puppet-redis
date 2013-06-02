@@ -38,7 +38,7 @@ class redis (
   $version = $redis::params::version,
   $redis_src_dir = $redis::params::redis_src_dir,
   $redis_bin_dir = $redis::params::redis_bin_dir,
-  $default_instance = $redis::params::default_instance,
+  $redis_slaveof_ip = $redis::params::redis_slaveof_ip,
 ) inherits redis::params {
 
   include wget
@@ -48,8 +48,8 @@ class redis (
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
   # Install default instance
-  if default_instance {
-    redis::instance { 'redis-default': }
+  redis::instance { 'redis-default': 
+    redis_slaveof_ip => $redis_slaveof_ip,
   }
 
   File {
