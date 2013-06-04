@@ -27,4 +27,5 @@ class redis::params {
   $redis_slowlog_max_len = 1024
   $redis_password = false
   $redis_slaveof_ip = false
+  $redis_read_only_slave = 'yes'
 }
