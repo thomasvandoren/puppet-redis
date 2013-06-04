@@ -68,7 +68,7 @@ loglevel <%= @redis_loglevel %>
 # Specify the log file name. Also 'stdout' can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile /var/log/redis_<%= @redis_port %>.log
+logfile /var/log/redis-<%= @title %>.log
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -141,7 +141,7 @@ rdbcompression yes
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename dump-<%= @redis_port %>.rdb
+dbfilename dump-<%= @title %>.rdb
 
 # The working directory.
 #
@@ -151,7 +151,7 @@ dbfilename dump-<%= @redis_port %>.rdb
 # The Append Only File will also be created inside this directory.
 # 
 # Note that you must specify a directory here, not a file name.
-dir /var/lib/redis/<%= @redis_port %>
+dir /var/lib/redis
 
 ################################# REPLICATION #################################
 
