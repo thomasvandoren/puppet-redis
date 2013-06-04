@@ -141,7 +141,7 @@ rdbcompression yes
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename dump.rdb
+dbfilename dump-<%= @redis_port %>.rdb
 
 # The working directory.
 #
@@ -151,7 +151,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 # 
 # Note that you must specify a directory here, not a file name.
-dir ./
+dir /var/lib/redis/<%= @redis_port %>
 
 ################################# REPLICATION #################################
 
@@ -160,8 +160,8 @@ dir ./
 # so for example it is possible to configure the slave to save the DB with a
 # different interval, or to listen to another port, and so on.
 #
-<% if redis_slaveof_ip %>
-slaveof <%= redis_slaveof_ip %> <%= redis_port %>
+<% if @redis_slaveof_ip %>
+slaveof <%= @redis_slaveof_ip %> <%= @redis_port %>
 <% end %>
 
 # If the master is password protected (using the "requirepass" configuration
