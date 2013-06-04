@@ -98,30 +98,25 @@ define redis::instance (
     }
   }
 
-  file { "redis-lib-port-${redis_port}":
-    ensure => directory,
-    path   => "/var/lib/redis/${redis_port}",
-  }
-
-  file { "redis-init-${redis_port}":
+  file { "redis-init-${title}":
     ensure  => present,
-    path    => "/etc/init.d/redis_${redis_port}",
+    path    => "/etc/init.d/redis-${title}",
     mode    => '0755',
     content => template('redis/redis.init.erb'),
-    notify  => Service["redis-${redis_port}"],
+    notify  => Service["redis-${title}"],
   }
-  file { "redis_port_${redis_port}.conf":
+  file { "redis-${title}.conf":
     ensure  => present,
-    path    => "/etc/redis/${redis_port}.conf",
+    path    => "/etc/redis/${title}.conf",
     mode    => '0644',
     content => template('redis/redis.conf.erb'),
   }
 
-  service { "redis-${redis_port}":
+  service { "redis-${title}":
     ensure    => running,
-    name      => "redis_${redis_port}",
+    name      => "redis-${title}",
     enable    => true,
-    require   => [ File["redis_port_${redis_port}.conf"], File["redis-init-${redis_port}"], File["redis-lib-port-${redis_port}"] ],
-    subscribe => File["redis_port_${redis_port}.conf"],
+    require   => [ File["redis-${title}.conf"], File["redis-init-${title}"] ],
+    subscribe => File["redis-${title}.conf"],
   }
 }
