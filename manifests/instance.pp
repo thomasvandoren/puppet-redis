@@ -113,7 +113,7 @@ define redis::instance (
     ensure  => present,
     path    => "/etc/redis/${redis_port}.conf",
     mode    => '0644',
-    content => template('redis/redis_port.conf.erb'),
+    content => template('redis/redis.conf.erb'),
   }
 
   service { "redis-${redis_port}":
