@@ -47,11 +47,6 @@ class redis (
   $redis_pkg_name = "redis-${version}.tar.gz"
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
-  # Install default instance
-  redis::instance { 'redis-default': 
-    redis_slaveof_ip => $redis_slaveof_ip,
-  }
-
   File {
     owner => root,
     group => root,
