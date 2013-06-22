@@ -44,6 +44,10 @@
 #   Password used by AUTH command. Will be setted is its not nil.
 #   Default: nil
 #
+# [*redis_saves*]
+#   Redis snapshotting parameters. Set to false for no snapshots.
+#   Default: ['save 900 1', 'save 300 10', 'save 60 10000']
+#
 # === Examples
 #
 # redis::instance { 'redis-6900':
@@ -69,7 +73,8 @@ define redis::instance (
   $redis_databases = $redis::params::redis_databases,
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
-  $redis_password = $redis::params::redis_password
+  $redis_password = $redis::params::redis_password,
+  $redis_saves = $redis::params::saves
   ) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing
