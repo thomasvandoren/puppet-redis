@@ -14,16 +14,26 @@ describe 'redis', :type => 'class' do
       should include_class('gcc')
       should include_class('wget')
 
-      should contain_file('/opt/redis-src').with(:ensure => 'directory')
-      should contain_file('/etc/redis').with(:ensure => 'directory')
+      should contain_file('/opt/redis-src').with(:ensure => 'directory',
+                                                 :owner => 'root',
+                                                 :group => 'root')
+      should contain_file('/etc/redis').with(:ensure => 'directory',
+                                             :owner => 'root',
+                                             :group => 'root')
       should contain_file('redis-lib').with(:ensure => 'directory',
-                                            :path   => '/var/lib/redis')
+                                            :path   => '/var/lib/redis',
+                                            :owner => 'root',
+                                            :group => 'root')
       should contain_file("redis-lib-port-6379").with(:ensure => 'directory',
-                                                 :path   => '/var/lib/redis/6379')
+                                                      :path   => '/var/lib/redis/6379',
+                                                      :owner => 'root',
+                                                      :group => 'root')
       should contain_file('redis-pkg').with(:ensure => 'present',
                                             :path   => '/opt/redis-src/redis-2.4.13.tar.gz',
                                             :mode   => '0644',
-                                            :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz')
+                                            :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz',
+                                            :owner => 'root',
+                                            :group => 'root')
       should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.4\.13\.tar\.gz/)
       should contain_file('redis-cli-link').with(:ensure => 'link',
                                                  :path   => '/usr/local/bin/redis-cli',
@@ -40,7 +50,9 @@ describe 'redis', :type => 'class' do
 
       should contain_file('redis-init-6379').with(:ensure => 'present',
                                              :path   => '/etc/init.d/redis_6379',
-                                             :mode   => '0755')
+                                             :mode   => '0755',
+                                             :owner => 'root',
+                                             :group => 'root')
       should contain_file('redis-init-6379').with_content(/^REDIS_BIND_ADDRESS="127.0.0.1"$/)
       should contain_file('redis-init-6379').with_content(/^CLIEXEC="\/opt\/redis\/bin\/redis-cli -h \$REDIS_BIND_ADDRESS -p \$REDIS_PORT/)
 
@@ -141,6 +153,50 @@ describe 'redis', :type => 'class' do
 
     it do
       expect { should raise_error(Puppet::Error) }
+    end # it
+  end # context
+
+  context "On a Debian system with a non-default user specified" do
+
+    let :facts do
+      {
+        :osfamily  => 'Debian'
+      }
+    end # let
+
+    let :params do
+      { :redis_user => 'my_user' }
+    end
+
+    it do
+      should contain_file('/opt/redis-src').with(:owner => 'my_user')
+      should contain_file('/etc/redis').with(:owner => 'my_user')
+      should contain_file('redis-lib').with(:owner => 'my_user')
+      should contain_file('redis-lib-port-6379').with(:owner => 'my_user')
+      should contain_file('redis-pkg').with(:owner => 'my_user')
+      should contain_file('redis-init-6379').with(:owner => 'my_user')
+    end # it
+  end # context
+
+  context "On a Debian system with a non-default group specified" do
+
+    let :facts do
+      {
+        :osfamily  => 'Debian'
+      }
+    end # let
+
+    let :params do
+      { :redis_group => 'my_group' }
+    end
+
+    it do
+      should contain_file('/opt/redis-src').with(:group => 'my_group')
+      should contain_file('/etc/redis').with(:group => 'my_group')
+      should contain_file('redis-lib').with(:group => 'my_group')
+      should contain_file('redis-lib-port-6379').with(:group => 'my_group')
+      should contain_file('redis-pkg').with(:group => 'my_group')
+      should contain_file('redis-init-6379').with(:group => 'my_group')
     end # it
   end # context
 end # describe

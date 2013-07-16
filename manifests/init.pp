@@ -37,7 +37,9 @@
 class redis (
   $version = $redis::params::version,
   $redis_src_dir = $redis::params::redis_src_dir,
-  $redis_bin_dir = $redis::params::redis_bin_dir
+  $redis_bin_dir = $redis::params::redis_bin_dir,
+  $redis_user = $redis::params::redis_user,
+  $redis_group = $redis::params::redis_group
 ) inherits redis::params {
 
   include wget
@@ -50,8 +52,8 @@ class redis (
   redis::instance { 'redis-default': }
 
   File {
-    owner => root,
-    group => root,
+    owner => $redis_user,
+    group => $redis_group
   }
   file { $redis_src_dir:
     ensure => directory,
