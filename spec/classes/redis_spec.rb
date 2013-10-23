@@ -24,7 +24,7 @@ describe 'redis', :type => 'class' do
                                             :path   => '/opt/redis-src/redis-2.4.13.tar.gz',
                                             :mode   => '0644',
                                             :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz')
-      should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.4\.13\.tar\.gz/)
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.4\.13\.tar\.gz/)
       should contain_file('redis-cli-link').with(:ensure => 'link',
                                                  :path   => '/usr/local/bin/redis-cli',
                                                  :target => '/opt/redis/bin/redis-cli')
@@ -119,7 +119,7 @@ describe 'redis', :type => 'class' do
 
     it do
       should_not contain_file('redis-pkg')
-      should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.6\.4\.tar\.gz/)
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.6\.4\.tar\.gz/)
 
       # Maxclients is left out for 2.6 unless it is explicitly set.
       should_not contain_file('redis_port_6379.conf').with_content(/maxclients 0/)
