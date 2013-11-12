@@ -29,4 +29,5 @@ class redis::params {
   $redis_password = false
   $redis_enable_snapshotting = true
   $redis_lua_time_limit      = 0
+  $create_default_instance   = true
 }
