@@ -84,7 +84,7 @@ databases <%= @redis_databases %>
 <% if @redis_enable_snapshotting %>
 save 900 1
 save 300 10
-save 60 10000
+save 60 40000
 <% end %>
 
 # Compress string objects using LZF when dump .rdb databases?
