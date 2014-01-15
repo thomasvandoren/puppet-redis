@@ -6,7 +6,7 @@
 #
 # [*version*]
 #   Version to install.
-#   Default: 2.4.13
+#   Default: 2.8.3
 #
 # [*redis_src_dir*]
 #   Location to unpack source code before building and installing it.
@@ -21,7 +21,7 @@
 # include redis
 #
 # class { 'redis':
-#   version       => '2.6',
+#   version       => '2.8',
 #   redis_src_dir => '/fake/path/redis-src',
 #   redis_bin_dir => '/fake/path/redis',
 # }
@@ -64,18 +64,8 @@ class redis (
     path   => '/var/lib/redis',
   }
 
-  # If the version is 2.4.13, use the tarball that ships with the
-  # module.
-  if ($version == '2.4.13') {
-    file { 'redis-pkg':
-      ensure => present,
-      path   => $redis_pkg,
-      mode   => '0644',
-      source => 'puppet:///modules/redis/redis-2.4.13.tar.gz',
-    }
-  }
   exec { 'get-redis-pkg':
-    command => "/usr/bin/wget --output-document ${redis_pkg} http://redis.googlecode.com/files/${redis_pkg_name}",
+    command => "/usr/bin/wget --output-document ${redis_pkg} http://download.redis.io/releases/${redis_pkg_name}",
     unless  => "/usr/bin/test -f ${redis_pkg}",
     require => File[$redis_src_dir],
   }

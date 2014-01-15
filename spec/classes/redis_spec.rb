@@ -11,8 +11,8 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
-      should include_class('gcc')
-      should include_class('wget')
+      should contain_class('gcc')
+      should contain_class('wget')
 
       should contain_file('/opt/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
@@ -20,11 +20,7 @@ describe 'redis', :type => 'class' do
                                             :path   => '/var/lib/redis')
       should contain_file("redis-lib-port-6379").with(:ensure => 'directory',
                                                  :path   => '/var/lib/redis/6379')
-      should contain_file('redis-pkg').with(:ensure => 'present',
-                                            :path   => '/opt/redis-src/redis-2.4.13.tar.gz',
-                                            :mode   => '0644',
-                                            :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz')
-      should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.4\.13\.tar\.gz/)
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.8\.3\.tar\.gz/)
       should contain_file('redis-cli-link').with(:ensure => 'link',
                                                  :path   => '/usr/local/bin/redis-cli',
                                                  :target => '/opt/redis/bin/redis-cli')
@@ -45,11 +41,11 @@ describe 'redis', :type => 'class' do
       should contain_file('redis-init-6379').with_content(/^CLIEXEC="\/opt\/redis\/bin\/redis-cli -h \$REDIS_BIND_ADDRESS -p \$REDIS_PORT/)
 
       # These values were changed in 2.6.
-      should contain_file('redis_port_6379.conf').with_content(/maxclients 0/)
-      should contain_file('redis_port_6379.conf').with_content(/hash-max-zipmap-entries 512/)
-      should contain_file('redis_port_6379.conf').with_content(/hash-max-zipmap-value 64/)
-      should_not contain_file('redis_port_6379.conf').with_content(/hash-max-ziplist-entries 512/)
-      should_not contain_file('redis_port_6379.conf').with_content(/hash-max-ziplist-value 64/)
+      should_not contain_file('redis_port_6379.conf').with_content(/maxclients 0/)
+      should_not contain_file('redis_port_6379.conf').with_content(/hash-max-zipmap-entries 512/)
+      should_not contain_file('redis_port_6379.conf').with_content(/hash-max-zipmap-value 64/)
+      should contain_file('redis_port_6379.conf').with_content(/hash-max-ziplist-entries 512/)
+      should contain_file('redis_port_6379.conf').with_content(/hash-max-ziplist-value 64/)
 
       # The bind config should not be present by default.
       should_not contain_file('redis_port_6379.conf').with_content(/bind \d+\.\d+\.\d+\.\d+/)
@@ -72,8 +68,8 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
-      should include_class('gcc')
-      should include_class('wget')
+      should contain_class('gcc')
+      should contain_class('wget')
 
       should contain_file('/fake/path/to/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
@@ -81,10 +77,6 @@ describe 'redis', :type => 'class' do
                                             :path   => '/var/lib/redis')
       should contain_file('redis-lib-port-6379').with(:ensure => 'directory',
                                                  :path   => '/var/lib/redis/6379')
-      should contain_file('redis-pkg').with(:ensure => 'present',
-                                            :path   => '/fake/path/to/redis-src/redis-2.4.13.tar.gz',
-                                            :mode   => '0644',
-                                            :source => 'puppet:///modules/redis/redis-2.4.13.tar.gz')
       should contain_file('redis-init-6379').with(:ensure => 'present',
                                              :path   => '/etc/init.d/redis_6379',
                                              :mode   => '0755')
@@ -119,7 +111,7 @@ describe 'redis', :type => 'class' do
 
     it do
       should_not contain_file('redis-pkg')
-      should contain_exec('get-redis-pkg').with_command(/http:\/\/redis\.googlecode\.com\/files\/redis-2\.6\.4\.tar\.gz/)
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.6\.4\.tar\.gz/)
 
       # Maxclients is left out for 2.6 unless it is explicitly set.
       should_not contain_file('redis_port_6379.conf').with_content(/maxclients 0/)
