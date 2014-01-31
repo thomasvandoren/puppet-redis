@@ -93,8 +93,11 @@ define redis::instance (
     /^2\.6\.\d+$/: {
       $real_redis_max_clients = $redis_max_clients
     }
+    /^2\.8\.\d+$/: {
+      $real_redis_max_clients = $redis_max_clients
+    }
     default: {
-      fail("Invalid redis version, ${version}. It must match 2.4.\\d+ or 2.6.\\d+.")
+      fail("Invalid redis version, ${version}. It must match 2.4.\\d+ or 2.6 or 2.8\\d+.")
     }
   }
 
