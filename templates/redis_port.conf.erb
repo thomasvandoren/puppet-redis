@@ -72,7 +72,7 @@ bind <%= @redis_bind_address %>
 #
 <% if @redis_unixsocket %>
 unixsocket <%= @redis_unixsocket %>
-unixsocketperm 755
+unixsocketperm 777
 <% end %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
