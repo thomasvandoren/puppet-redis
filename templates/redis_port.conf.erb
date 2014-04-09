@@ -31,8 +31,9 @@ bind <%= @redis_bind_address %>
 # Specify the path for the unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
-#
-# unixsocket /tmp/redis.sock
+<% if @redis_unixsocket %>
+unixsocket <%= @redis_unixsocket %>
+<% end %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout <%= @redis_timeout %>

@@ -71,7 +71,8 @@ define redis::instance (
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
   $redis_enable_snapshotting = $redis::params::redis_enable_snapshotting,
-  $redis_lua_time_limit = $redis::params::redis_lua_time_limit
+  $redis_lua_time_limit = $redis::params::redis_lua_time_limit,
+  $redis_unixsocket = $redis::params::redis_unixsocket
   ) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing
