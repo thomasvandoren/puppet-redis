@@ -38,6 +38,17 @@ redis::instance { 'redis-6900':
 }
 ```
 
+Development
+-----------
+
+To run the linter and spec tests locally:
+
+```bash
+bundle install --gemfile .gemfile
+rake lint
+rake spec
+```
+
 Authors
 -------
 Thomas Van Doren
