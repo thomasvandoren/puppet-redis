@@ -6,7 +6,7 @@
 #
 # [*version*]
 #   Version to install.
-#   Default: 2.8.3
+#   Default: 2.8.11
 #
 # [*redis_src_dir*]
 #   Location to unpack source code before building and installing it.

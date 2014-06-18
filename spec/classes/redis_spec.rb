@@ -20,7 +20,7 @@ describe 'redis', :type => 'class' do
                                             :path   => '/var/lib/redis')
       should contain_file("redis-lib-port-6379").with(:ensure => 'directory',
                                                  :path   => '/var/lib/redis/6379')
-      should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.8\.3\.tar\.gz/)
+      should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.8\.11\.tar\.gz/)
       should contain_file('redis-cli-link').with(:ensure => 'link',
                                                  :path   => '/usr/local/bin/redis-cli',
                                                  :target => '/opt/redis/bin/redis-cli')
