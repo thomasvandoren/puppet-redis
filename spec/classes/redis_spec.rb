@@ -163,8 +163,8 @@ describe 'redis', :type => 'class' do
       should contain_file('/etc/redis').with(:owner => 'my_user')
       should contain_file('redis-lib').with(:owner => 'my_user')
       should contain_file('redis-lib-port-6379').with(:owner => 'my_user')
-      should contain_file('redis-pkg').with(:owner => 'my_user')
       should contain_file('redis-init-6379').with(:owner => 'my_user')
+      should_not contain_file('redis-pkg')
     end # it
   end # context
 
@@ -185,8 +185,8 @@ describe 'redis', :type => 'class' do
       should contain_file('/etc/redis').with(:group => 'my_group')
       should contain_file('redis-lib').with(:group => 'my_group')
       should contain_file('redis-lib-port-6379').with(:group => 'my_group')
-      should contain_file('redis-pkg').with(:group => 'my_group')
       should contain_file('redis-init-6379').with(:group => 'my_group')
+      should_not contain_file('redis-pkg')
     end # it
   end # context
 end # describe
