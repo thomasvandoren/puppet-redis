@@ -7,7 +7,7 @@ Install and configure redis.
 
 Usage
 -----
-Installs redis server and client with reasonable defaults (version 2.4.13 is included in the module).
+Installs redis server and client with reasonable defaults.
 
 ```puppet
 include redis

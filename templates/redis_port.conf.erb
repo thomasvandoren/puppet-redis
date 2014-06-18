@@ -357,7 +357,7 @@ slowlog-max-len <%= @redis_slowlog_max_len %>
 <% if @version =~ /^2\.4\.\d+$/ %>
 hash-max-zipmap-entries 512
 hash-max-zipmap-value 64
-<% elsif @version =~ /^2\.6\.\d+$/ %>
+<% elsif @version =~ /^2\.[68]\.\d+$/ %>
 hash-max-ziplist-entries 512
 hash-max-ziplist-value 64
 <% end %>
