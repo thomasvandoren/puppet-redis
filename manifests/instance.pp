@@ -14,10 +14,10 @@
 #
 # [*redis_max_clients*]
 #   Set the redis config value maxclients. If no value provided, it is
-#   not included in the configuration for 2.6 and set to 0 (unlimited)
+#   not included in the configuration for 2.6+ and set to 0 (unlimited)
 #   for 2.4.
 #   Default: 0 (2.4)
-#   Default: nil (2.6)
+#   Default: nil (2.6+)
 #
 # [*redis_timeout*]
 #   Set the redis config value timeout (seconds).
@@ -88,11 +88,11 @@ define redis::instance (
         $real_redis_max_clients = $redis_max_clients
       }
     }
-    /^2\.6\.\d+$/: {
+    /^2\.[68]\.\d+$/: {
       $real_redis_max_clients = $redis_max_clients
     }
     default: {
-      fail("Invalid redis version, ${version}. It must match 2.4.\\d+ or 2.6.\\d+.")
+      fail("Invalid redis version, ${version}. It must match 2.4.\\d+ or 2.[68].\\d+.")
     }
   }
 

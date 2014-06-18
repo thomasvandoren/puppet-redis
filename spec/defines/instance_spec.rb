@@ -44,6 +44,11 @@ describe 'redis::instance', :type => 'define' do
   end # context
 
   context "With a non-default port parameter" do
+    let :facts do
+      {
+        :osfamily => 'Debian'
+      }
+    end # let
     let :params do
       {
         :redis_port => '6900'
@@ -60,6 +65,11 @@ describe 'redis::instance', :type => 'define' do
   end # context
 
   context "With a non default bind address" do
+    let :facts do
+      {
+        :osfamily => 'Debian'
+      }
+    end # let
     let :params do
       {
         :redis_port => '6900',
