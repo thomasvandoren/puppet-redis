@@ -3,6 +3,21 @@ require 'spec_helper'
 describe 'redis::instance', :type => 'define' do
   let(:title) { 'redis-instance' }
 
+  context "On Debian systems with default parameters" do
+    let :facts do
+      {
+        :osfamily => 'Debian'
+      }
+    end # let
+
+    it do
+      should contain_file('redis_port_6379.conf').with_content(/^port 6379$/)
+      should contain_file('redis_port_6379.conf').with_content(/^save 900 1$/)
+      should contain_file('redis_port_6379.conf').with_content(/^save 300 10$/)
+      should contain_file('redis_port_6379.conf').with_content(/^save 60 10000$/)
+    end # it
+  end # context
+
   context "On Debian systems with no password parameter" do
 
     let :facts do
@@ -18,7 +33,7 @@ describe 'redis::instance', :type => 'define' do
     end # let
 
     it do
-      should_not contain_file('redis_port_6379.conf').with_content(/^requirepass/)
+      should contain_file('redis_port_6379.conf').without_content(/^requirepass/)
     end # it
   end # context
 

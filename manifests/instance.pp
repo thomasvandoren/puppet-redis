@@ -74,7 +74,7 @@ define redis::instance (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::saves
+  $redis_saves = $redis::params::redis_saves
   ) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing
