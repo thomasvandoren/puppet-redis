@@ -6,7 +6,7 @@
 #
 # [*version*]
 #   Version to install.
-#   Default: 2.4.13
+#   Default: 2.6.16
 #
 # [*redis_src_dir*]
 #   Location to unpack source code before building and installing it.
@@ -75,7 +75,7 @@ class redis (
     }
   }
   exec { 'get-redis-pkg':
-    command => "/usr/bin/wget --output-document ${redis_pkg} http://redis.googlecode.com/files/${redis_pkg_name}",
+    command => "/usr/bin/wget --output-document ${redis_pkg} http://download.redis.io/releases/${redis_pkg_name}",
     unless  => "/usr/bin/test -f ${redis_pkg}",
     require => File[$redis_src_dir],
   }
