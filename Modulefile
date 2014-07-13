@@ -1,5 +1,5 @@
 name         'thomasvandoren-redis'
-version      '0.0.9'
+version      '0.10.0'
 summary      'Install and configure redis.'
 description  'Install and configure redis.'
 author       'Thomas Van Doren'
