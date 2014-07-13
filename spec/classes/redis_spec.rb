@@ -168,4 +168,39 @@ describe 'redis', :type => 'class' do
       should_not contain_file('redis-pkg')
     end # it
   end # context
+
+  context "On a Debian system with instance parameters specified" do
+    let :params do
+      {
+        :redis_port                    => '8000',
+        :redis_bind_address            => '10.1.2.3',
+        :redis_max_memory              => '64gb',
+        :redis_max_clients             => '10000',
+        :redis_timeout                 => '15',
+        :redis_loglevel                => 'warning',
+        :redis_databases               => '64',
+        :redis_slowlog_log_slower_than => '5000',
+        :redis_slowlog_max_len         => '4096',
+        :redis_password                => 'sekrit',
+        :redis_saves                   => ['save 17 42', 'save 1 2']
+      }
+    end # let
+
+    it do
+      should compile.with_all_deps
+      should contain_file('redis_port_8000.conf').with_ensure('present')
+      should contain_file('redis_port_8000.conf').with_content(/^port 8000$/)
+      should contain_file('redis_port_8000.conf').with_content(/^bind 10\.1\.2\.3$/)
+      should contain_file('redis_port_8000.conf').with_content(/^maxmemory 64gb$/)
+      should contain_file('redis_port_8000.conf').with_content(/^maxclients 10000$/)
+      should contain_file('redis_port_8000.conf').with_content(/^timeout 15$/)
+      should contain_file('redis_port_8000.conf').with_content(/^loglevel warning$/)
+      should contain_file('redis_port_8000.conf').with_content(/^databases 64$/)
+      should contain_file('redis_port_8000.conf').with_content(/^slowlog-log-slower-than 5000$/)
+      should contain_file('redis_port_8000.conf').with_content(/^slowlog-max-len 4096$/)
+      should contain_file('redis_port_8000.conf').with_content(/^requirepass sekrit$/)
+      should contain_file('redis_port_8000.conf').with_content(/^save 17 42$/)
+      should contain_file('redis_port_8000.conf').with_content(/^save 1 2$/)
+    end # it
+  end # context
 end # describe
