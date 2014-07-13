@@ -2,15 +2,16 @@ require 'spec_helper'
 
 describe 'redis', :type => 'class' do
 
+  let :facts do
+    {
+      :osfamily  => 'Debian'
+    }
+  end # let
+
   context "On a Debian OS with default params" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     it do
+      should compile.with_all_deps
+
       should contain_class('gcc')
       should contain_class('wget')
 
@@ -63,13 +64,6 @@ describe 'redis', :type => 'class' do
   end # context
 
   context "On a Debian OS with non-default src and bin locations" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     let :params do
       {
         :redis_src_dir => '/fake/path/to/redis-src',
@@ -78,6 +72,8 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
+      should compile.with_all_deps
+
       should contain_class('gcc')
       should contain_class('wget')
 
@@ -106,13 +102,6 @@ describe 'redis', :type => 'class' do
   end # context
 
   context "On a Debian OS with version 2.6 param" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     let :params do
       {
         :version => '2.6.4'
@@ -120,6 +109,8 @@ describe 'redis', :type => 'class' do
     end # let
 
     it do
+      should compile.with_all_deps
+
       should_not contain_file('redis-pkg')
       should contain_exec('get-redis-pkg').with_command(/http:\/\/download\.redis\.io\/releases\/redis-2\.6\.4\.tar\.gz/)
 
@@ -147,18 +138,12 @@ describe 'redis', :type => 'class' do
   end # context
 
   context "On a Debian system with a non-default user specified" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     let :params do
       { :redis_user => 'my_user' }
     end
 
     it do
+      should compile.with_all_deps
       should contain_file('/opt/redis-src').with(:owner => 'my_user')
       should contain_file('/etc/redis').with(:owner => 'my_user')
       should contain_file('redis-lib').with(:owner => 'my_user')
@@ -169,18 +154,12 @@ describe 'redis', :type => 'class' do
   end # context
 
   context "On a Debian system with a non-default group specified" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     let :params do
       { :redis_group => 'my_group' }
     end
 
     it do
+      should compile.with_all_deps
       should contain_file('/opt/redis-src').with(:group => 'my_group')
       should contain_file('/etc/redis').with(:group => 'my_group')
       should contain_file('redis-lib').with(:group => 'my_group')
