@@ -3,13 +3,13 @@ require 'spec_helper'
 describe 'redis::instance', :type => 'define' do
   let(:title) { 'redis-instance' }
 
-  context "On Debian systems with default parameters" do
-    let :facts do
-      {
-        :osfamily => 'Debian'
-      }
-    end # let
+  let :facts do
+    {
+      :osfamily  => 'RedHat'
+    }
+  end # let
 
+  context "On Debian systems with default parameters" do
     it do
       should contain_file('redis_port_6379.conf').with_content(/^port 6379$/)
       should contain_file('redis_port_6379.conf').with_content(/^save 900 1$/)
@@ -19,13 +19,6 @@ describe 'redis::instance', :type => 'define' do
   end # context
 
   context "On Debian systems with no password parameter" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     let :params do
       {
         :redis_password => false
@@ -38,13 +31,6 @@ describe 'redis::instance', :type => 'define' do
   end # context
 
   context "On Debian systems with password parameter" do
-
-    let :facts do
-      {
-        :osfamily  => 'Debian'
-      }
-    end # let
-
     let :params do
       {
         :redis_port     => '6900',
@@ -53,17 +39,14 @@ describe 'redis::instance', :type => 'define' do
     end # let
 
     it do
+      should compile.with_all_deps
+
       should contain_file('redis_port_6900.conf').with_content(/^requirepass ThisIsAReallyBigSecret/)
       should contain_file('redis-init-6900').with_content(/^CLIEXEC="[\w\/]+redis-cli -h \$REDIS_BIND_ADDRESS -p \$REDIS_PORT -a ThisIsAReallyBigSecret/)
     end # it
   end # context
 
   context "With a non-default port parameter" do
-    let :facts do
-      {
-        :osfamily => 'Debian'
-      }
-    end # let
     let :params do
       {
         :redis_port => '6900'
@@ -71,6 +54,8 @@ describe 'redis::instance', :type => 'define' do
     end # let
 
     it do
+      should compile.with_all_deps
+
       should contain_file('redis_port_6900.conf').with_content(/^port 6900$/)
       should contain_file('redis_port_6900.conf').with_content(/^pidfile \/var\/run\/redis_6900\.pid$/)
       should contain_file('redis_port_6900.conf').with_content(/^logfile \/var\/log\/redis_6900\.log$/)
@@ -80,11 +65,6 @@ describe 'redis::instance', :type => 'define' do
   end # context
 
   context "With a non default bind address" do
-    let :facts do
-      {
-        :osfamily => 'Debian'
-      }
-    end # let
     let :params do
       {
         :redis_port => '6900',
@@ -93,6 +73,8 @@ describe 'redis::instance', :type => 'define' do
     end # let
 
     it do
+      should compile.with_all_deps
+
       should contain_file('redis_port_6900.conf').with_content(/^bind 10\.1\.2\.3$/)
       should contain_file('redis-init-6900').with_content(/^REDIS_BIND_ADDRESS="10.1.2.3"$/)
     end # it
