@@ -98,7 +98,8 @@ class redis (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::redis_saves
+  $redis_saves = $redis::params::redis_saves,
+  $create_default_instance = $redis::params::create_default_instance
 ) inherits redis::params {
 
   include wget
@@ -108,18 +109,20 @@ class redis (
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
   # Install default instance
-  redis::instance { 'redis-default':
-    redis_port                    => $redis_port,
-    redis_bind_address            => $redis_bind_address,
-    redis_max_memory              => $redis_max_memory,
-    redis_max_clients             => $redis_max_clients,
-    redis_timeout                 => $redis_timeout,
-    redis_loglevel                => $redis_loglevel,
-    redis_databases               => $redis_databases,
-    redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
-    redis_slowlog_max_len         => $redis_slowlog_max_len,
-    redis_password                => $redis_password,
-    redis_saves                   => $redis_saves,
+  if($create_default_instance) {
+    redis::instance { 'redis-default':
+      redis_port                    => $redis_port,
+      redis_bind_address            => $redis_bind_address,
+      redis_max_memory              => $redis_max_memory,
+      redis_max_clients             => $redis_max_clients,
+      redis_timeout                 => $redis_timeout,
+      redis_loglevel                => $redis_loglevel,
+      redis_databases               => $redis_databases,
+      redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
+      redis_slowlog_max_len         => $redis_slowlog_max_len,
+      redis_password                => $redis_password,
+      redis_saves                   => $redis_saves,
+    }
   }
 
   File {
