@@ -143,12 +143,9 @@ databases <%= @redis_databases %>
 #   like in the following example:
 #
 #   save ""
-
-<% if @redis_enable_snapshotting %>
-save 900 1
-save 300 10
-save 60 40000
-<% end %>
+<% if @redis_saves %>
+<%= @redis_saves.join("\n") %>
+<% end -%>
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
@@ -624,11 +621,17 @@ notify-keyspace-events ""
 
 ############################### ADVANCED CONFIG ###############################
 
-# Hashes are encoded using a memory efficient data structure when they have a
-# small number of entries, and the biggest entry does not exceed a given
-# threshold. These thresholds can be configured using the following directives.
+# Hashes are encoded in a special way (much more memory efficient) when they
+# have at max a given numer of elements, and the biggest element does not
+# exceed a given threshold. You can configure this limits with the following
+# configuration directives.
+<% if @version =~ /^2\.4\.\d+$/ %>
+hash-max-zipmap-entries 512
+hash-max-zipmap-value 64
+<% elsif @version =~ /^2\.[68]\.\d+$/ %>
 hash-max-ziplist-entries 512
 hash-max-ziplist-value 64
+<% end %>
 
 # Similarly to hashes, small lists are also encoded in a special way in order
 # to save a lot of space. The special representation is only used when
