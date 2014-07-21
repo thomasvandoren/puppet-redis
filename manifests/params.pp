@@ -30,7 +30,6 @@ class redis::params {
   $redis_saves = ['save 900 1', 'save 300 10', 'save 60 40000']
   $redis_user = 'root'
   $redis_group = 'root'
-  $redis_enable_snapshotting = true
   $redis_lua_time_limit      = 0
   $create_default_instance   = true
   $redis_unixsocket = undef
