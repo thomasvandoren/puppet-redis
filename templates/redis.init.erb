@@ -19,6 +19,8 @@ CONF="/etc/redis/${REDIS_PORT}.conf"
 # Required-Stop: 
 # Should-Start: 
 # Should-Stop: 
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
 # Short-Description: start and stop redis_<%= @redis_port %>
 # Description: Redis daemon
 ### END INIT INFO
