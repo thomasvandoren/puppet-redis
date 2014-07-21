@@ -2,7 +2,8 @@
 *~
 *#*#
 *.#*
-
+.project
+metadata.json
 # puppet-module build artifacts
 /pkg
 /.gemfile.lock
