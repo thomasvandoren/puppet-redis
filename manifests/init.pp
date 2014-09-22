@@ -61,6 +61,10 @@ class redis (
     ensure => directory,
     path   => '/var/lib/redis',
   }
+  file { "/etc/sysctl.d/overcommit.conf":
+    ensure => file,
+    content => "vm.overcommit_memory=1",
+  }
 
   exec { 'get-redis-pkg':
     command => "/usr/bin/wget --output-document ${redis_pkg} http://redis.googlecode.com/files/${redis_pkg_name}",
