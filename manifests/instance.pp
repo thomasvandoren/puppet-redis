@@ -78,7 +78,8 @@ define redis::instance (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::redis_saves
+  $redis_saves = $redis::params::redis_saves,
+  $redis_server = $redis::params::redis_server
   ) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing
@@ -105,30 +106,34 @@ define redis::instance (
     }
   }
 
-  file { "redis-lib-port-${redis_port}":
-    ensure => directory,
-    path   => "/var/lib/redis/${redis_port}",
-  }
+  if $redis_server == true {
+    file { "redis-lib-port-${redis_port}":
+      ensure => directory,
+      path   => "/var/lib/redis/${redis_port}",
+    }
 
-  file { "redis-init-${redis_port}":
-    ensure  => present,
-    path    => "/etc/init.d/redis_${redis_port}",
-    mode    => '0755',
-    content => template('redis/redis.init.erb'),
-    notify  => Service["redis-${redis_port}"],
+    file { "redis-init-${redis_port}":
+      ensure  => present,
+      path    => "/etc/init.d/redis_${redis_port}",
+      mode    => '0755',
+      content => template('redis/redis.init.erb'),
+      notify  => Service["redis-${redis_port}"],
+    }
+    file { "redis_port_${redis_port}.conf":
+      ensure  => present,
+      path    => "/etc/redis/${redis_port}.conf",
+      mode    => '0644',
+      content => template('redis/redis_port.conf.erb'),
+    }
+  
+    service { "redis-${redis_port}":
+      ensure    => running,
+      name      => "redis_${redis_port}",
+      enable    => true,
+      require   => [ File["redis_port_${redis_port}.conf"], File["redis-init-${redis_port}"], File["redis-lib-port-${redis_port}"] ],
+      subscribe => File["redis_port_${redis_port}.conf"],
+    }
   }
-  file { "redis_port_${redis_port}.conf":
-    ensure  => present,
-    path    => "/etc/redis/${redis_port}.conf",
-    mode    => '0644',
-    content => template('redis/redis_port.conf.erb'),
-  }
-
-  service { "redis-${redis_port}":
-    ensure    => running,
-    name      => "redis_${redis_port}",
-    enable    => true,
-    require   => [ File["redis_port_${redis_port}.conf"], File["redis-init-${redis_port}"], File["redis-lib-port-${redis_port}"] ],
-    subscribe => File["redis_port_${redis_port}.conf"],
+  else {
   }
 }

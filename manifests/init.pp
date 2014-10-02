@@ -98,7 +98,8 @@ class redis (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::redis_saves
+  $redis_saves = $redis::params::redis_saves,
+  $redis_server = $redis::params::redis_server
 ) inherits redis::params {
 
   include wget
@@ -120,6 +121,7 @@ class redis (
     redis_slowlog_max_len         => $redis_slowlog_max_len,
     redis_password                => $redis_password,
     redis_saves                   => $redis_saves,
+    redis_server                  => $redis_server,
   }
 
   File {
