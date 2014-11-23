@@ -59,7 +59,7 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port_6379.conf').with_content(/hash-max-ziplist-value 64/)
 
       # The bind config should not be present by default.
-      should_not contain_file('redis_port_6379.conf').with_content(/bind \d+\.\d+\.\d+\.\d+/)
+      should_not contain_file('redis_port_6379.conf').with_content(/^bind \d+\.\d+\.\d+\.\d+/)
     end # it
   end # context
 
