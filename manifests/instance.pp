@@ -17,11 +17,8 @@
 #   Default: 4gb
 #
 # [*redis_max_clients*]
-#   Set the redis config value maxclients. If no value provided, it is
-#   not included in the configuration for 2.6+ and set to 0 (unlimited)
-#   for 2.4.
-#   Default: 0 (2.4)
-#   Default: nil (2.6+)
+#   Set the redis config value maxclients.
+#   Default: nil
 #
 # [*redis_timeout*]
 #   Set the redis config value timeout (seconds).
@@ -87,23 +84,6 @@ define redis::instance (
   include redis
 
   $version = $redis::version
-
-  case $version {
-    /^2\.4\.\d+$/: {
-      if ($redis_max_clients == false) {
-        $real_redis_max_clients = 0
-      }
-      else {
-        $real_redis_max_clients = $redis_max_clients
-      }
-    }
-    /^2\.[68]\.\d+$/: {
-      $real_redis_max_clients = $redis_max_clients
-    }
-    default: {
-      fail("Invalid redis version, ${version}. It must match 2.4.\\d+ or 2.[68].\\d+.")
-    }
-  }
 
   file { "redis-lib-port-${redis_port}":
     ensure => directory,

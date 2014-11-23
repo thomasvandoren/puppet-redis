@@ -175,8 +175,8 @@ requirepass <%= @redis_password %>
 # an error 'max number of clients reached'.
 #
 # maxclients 128
-<% if @real_redis_max_clients %>
-maxclients <%= @real_redis_max_clients %>
+<% if @redis_max_clients %>
+maxclients <%= @redis_max_clients %>
 <% end %>
 
 # Don't use more memory than the specified amount of bytes.
@@ -354,13 +354,8 @@ slowlog-max-len <%= @redis_slowlog_max_len %>
 # have at max a given numer of elements, and the biggest element does not
 # exceed a given threshold. You can configure this limits with the following
 # configuration directives.
-<% if @version =~ /^2\.4\.\d+$/ %>
-hash-max-zipmap-entries 512
-hash-max-zipmap-value 64
-<% elsif @version =~ /^2\.[68]\.\d+$/ %>
 hash-max-ziplist-entries 512
 hash-max-ziplist-value 64
-<% end %>
 
 # Similarly to hashes, small lists are also encoded in a special way in order
 # to save a lot of space. The special representation is only used when
