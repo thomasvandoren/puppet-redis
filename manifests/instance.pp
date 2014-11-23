@@ -49,6 +49,38 @@
 #   Redis snapshotting parameters. Set to false for no snapshots.
 #   Default: ['save 900 1', 'save 300 10', 'save 60 10000']
 #
+# [*redis_appendonly*]
+#   Append Only File persistence mode.
+#   Default: no
+#
+# [*redis_appendfilename*]
+#   Append Only File name.
+#   Default: appendonly.aof
+#
+# [*redis_appendfsync*]
+#   Append Only File fsync mode.
+#   Default: everysec
+#
+# [*redis_no_appendfsync_on_rewrite*]
+#   Append Only File prevent fsync during rewrite.
+#   Default: no
+#
+# [*redis_auto_aof_rewrite_percentage*]
+#   Append Only File auto-rewrite percentage.
+#   Default: 100
+#
+# [*redis_auto_aof_rewrite_min_size*]
+#   Append Only File auto-rewrite size.
+#   Default: 64mb
+#
+# [*redis_aof_load_truncated*]
+#   Append Only File load truncated.
+#   Default: yes (>= 2.8.15)
+#
+# [*redis_aof_rewrite_incremental_fsync*]
+#   Append Only File rewrite incremental fsync.
+#   Default: yes
+#
 # === Examples
 #
 # redis::instance { 'redis-6900':
@@ -75,8 +107,16 @@ define redis::instance (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::redis_saves
-  ) {
+  $redis_saves = $redis::params::redis_saves,
+  $redis_appendonly = $redis::params::redis_appendonly,
+  $redis_appendfilename = $redis::params::redis_appendfilename,
+  $redis_appendfsync = $redis::params::redis_appendfsync,
+  $redis_no_appendfsync_on_rewrite = $redis::params::redis_no_appendfsync_on_rewrite,
+  $redis_auto_aof_rewrite_percentage = $redis::params::redis_auto_aof_rewrite_percentage,
+  $redis_auto_aof_rewrite_min_size = $redis::params::redis_auto_aof_rewrite_min_size,
+  $redis_aof_load_truncated = $redis::params::redis_aof_load_truncated,
+  $redis_aof_rewrite_incremental_fsync = $redis::params::redis_aof_rewrite_incremental_fsync
+) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing
   # Class['redis'] -> Redis::Instance[$name]

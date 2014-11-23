@@ -172,17 +172,24 @@ describe 'redis', :type => 'class' do
   context "On a Debian system with instance parameters specified" do
     let :params do
       {
-        :redis_port                    => '8000',
-        :redis_bind_address            => '10.1.2.3',
-        :redis_max_memory              => '64gb',
-        :redis_max_clients             => '10000',
-        :redis_timeout                 => '15',
-        :redis_loglevel                => 'warning',
-        :redis_databases               => '64',
-        :redis_slowlog_log_slower_than => '5000',
-        :redis_slowlog_max_len         => '4096',
-        :redis_password                => 'sekrit',
-        :redis_saves                   => ['save 17 42', 'save 1 2']
+        :redis_port                          => '8000',
+        :redis_bind_address                  => '10.1.2.3',
+        :redis_max_memory                    => '64gb',
+        :redis_max_clients                   => '10000',
+        :redis_timeout                       => '15',
+        :redis_loglevel                      => 'warning',
+        :redis_databases                     => '64',
+        :redis_slowlog_log_slower_than       => '5000',
+        :redis_slowlog_max_len               => '4096',
+        :redis_password                      => 'sekrit',
+        :redis_saves                         => ['save 17 42', 'save 1 2'],
+        :redis_appendonly                    => true,
+        :redis_appendfilename                => 'aof.aof',
+        :redis_appendfsync                   => 'always',
+        :redis_no_appendfsync_on_rewrite     => true,
+        :redis_auto_aof_rewrite_percentage   => 42,
+        :redis_auto_aof_rewrite_min_size     => '32mb',
+        :redis_aof_rewrite_incremental_fsync => false
       }
     end # let
 
@@ -201,6 +208,13 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port_8000.conf').with_content(/^requirepass sekrit$/)
       should contain_file('redis_port_8000.conf').with_content(/^save 17 42$/)
       should contain_file('redis_port_8000.conf').with_content(/^save 1 2$/)
+      should contain_file('redis_port_8000.conf').with_content(/^appendonly yes$/)
+      should contain_file('redis_port_8000.conf').with_content(/^appendfilename "aof.aof"$/)
+      should contain_file('redis_port_8000.conf').with_content(/^appendfsync always$/)
+      should contain_file('redis_port_8000.conf').with_content(/^no-appendfsync-on-rewrite yes$/)
+      should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-percentage 42$/)
+      should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-min-size 32mb$/)
+      should contain_file('redis_port_8000.conf').with_content(/^aof-rewrite-incremental-fsync no$/)
     end # it
   end # context
 end # describe

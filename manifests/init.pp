@@ -61,6 +61,38 @@
 #   Redis snapshotting parameters. Set to false for no snapshots.
 #   Default: ['save 900 1', 'save 300 10', 'save 60 10000']
 #
+# [*redis_appendonly*]
+#   Append Only File persistence mode.
+#   Default: false
+#
+# [*redis_appendfilename*]
+#   Append Only File name.
+#   Default: appendonly.aof
+#
+# [*redis_appendfsync*]
+#   Append Only File fsync mode.
+#   Default: everysec
+#
+# [*redis_no_appendfsync_on_rewrite*]
+#   Append Only File prevent fsync during rewrite.
+#   Default: false
+#
+# [*redis_auto_aof_rewrite_percentage*]
+#   Append Only File auto-rewrite percentage.
+#   Default: 100
+#
+# [*redis_auto_aof_rewrite_min_size*]
+#   Append Only File auto-rewrite size.
+#   Default: 64mb
+#
+# [*redis_aof_load_truncated*]
+#   Append Only File load truncated.
+#   Default: true (>= 2.8.15)
+#
+# [*redis_aof_rewrite_incremental_fsync*]
+#   Append Only File rewrite incremental fsync.
+#   Default: true
+#
 # === Examples
 #
 # include redis
@@ -95,7 +127,15 @@ class redis (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::redis_saves
+  $redis_saves = $redis::params::redis_saves,
+  $redis_appendonly = $redis::params::redis_appendonly,
+  $redis_appendfilename = $redis::params::redis_appendfilename,
+  $redis_appendfsync = $redis::params::redis_appendfsync,
+  $redis_no_appendfsync_on_rewrite = $redis::params::redis_no_appendfsync_on_rewrite,
+  $redis_auto_aof_rewrite_percentage = $redis::params::redis_auto_aof_rewrite_percentage,
+  $redis_auto_aof_rewrite_min_size = $redis::params::redis_auto_aof_rewrite_min_size,
+  $redis_aof_load_truncated = $redis::params::redis_aof_load_truncated,
+  $redis_aof_rewrite_incremental_fsync = $redis::params::redis_aof_rewrite_incremental_fsync
 ) inherits redis::params {
 
   include wget
@@ -106,17 +146,25 @@ class redis (
 
   # Install default instance
   redis::instance { 'redis-default':
-    redis_port                    => $redis_port,
-    redis_bind_address            => $redis_bind_address,
-    redis_max_memory              => $redis_max_memory,
-    redis_max_clients             => $redis_max_clients,
-    redis_timeout                 => $redis_timeout,
-    redis_loglevel                => $redis_loglevel,
-    redis_databases               => $redis_databases,
-    redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
-    redis_slowlog_max_len         => $redis_slowlog_max_len,
-    redis_password                => $redis_password,
-    redis_saves                   => $redis_saves,
+    redis_port                          => $redis_port,
+    redis_bind_address                  => $redis_bind_address,
+    redis_max_memory                    => $redis_max_memory,
+    redis_max_clients                   => $redis_max_clients,
+    redis_timeout                       => $redis_timeout,
+    redis_loglevel                      => $redis_loglevel,
+    redis_databases                     => $redis_databases,
+    redis_slowlog_log_slower_than       => $redis_slowlog_log_slower_than,
+    redis_slowlog_max_len               => $redis_slowlog_max_len,
+    redis_password                      => $redis_password,
+    redis_saves                         => $redis_saves,
+    redis_appendonly                    => $redis_appendonly,
+    redis_appendfilename                => $redis_appendfilename,
+    redis_appendfsync                   => $redis_appendfsync,
+    redis_no_appendfsync_on_rewrite     => $redis_no_appendfsync_on_rewrite,
+    redis_auto_aof_rewrite_percentage   => $redis_auto_aof_rewrite_percentage,
+    redis_auto_aof_rewrite_min_size     => $redis_auto_aof_rewrite_min_size,
+    redis_aof_load_truncated            => $redis_aof_load_truncated,
+    redis_aof_rewrite_incremental_fsync => $redis_aof_rewrite_incremental_fsync,
   }
 
   File {

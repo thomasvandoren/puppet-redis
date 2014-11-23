@@ -30,5 +30,13 @@ class redis::params {
   $redis_saves = ['save 900 1', 'save 300 10', 'save 60 10000']
   $redis_user = 'root'
   $redis_group = 'root'
+  $redis_appendonly = false
+  $redis_appendfilename = 'appendonly.aof'
+  $redis_appendfsync = 'everysec'
+  $redis_no_appendfsync_on_rewrite = false
+  $redis_auto_aof_rewrite_percentage = 100
+  $redis_auto_aof_rewrite_min_size = '64mb'
+  $redis_aof_load_truncated = true
+  $redis_aof_rewrite_incremental_fsync = true
 
 }

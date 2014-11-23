@@ -520,11 +520,11 @@ maxmemory <%= @redis_max_memory %>
 #
 # Please check http://redis.io/topics/persistence for more information.
 
-appendonly no
+appendonly <%= @redis_appendonly ? 'yes' : 'no' %>
 
 # The name of the append only file (default: "appendonly.aof")
 
-appendfilename "appendonly.aof"
+appendfilename "<%= @redis_appendfilename %>"
 
 # The fsync() call tells the Operating System to actually write data on disk
 # instead of waiting for more data in the output buffer. Some OS will really flush
@@ -550,7 +550,7 @@ appendfilename "appendonly.aof"
 # If unsure, use "everysec".
 
 # appendfsync always
-appendfsync everysec
+appendfsync <%= @redis_appendfsync %>
 # appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
@@ -572,7 +572,7 @@ appendfsync everysec
 # If you have latency problems turn this to "yes". Otherwise leave it as
 # "no" that is the safest pick from the point of view of durability.
 
-no-appendfsync-on-rewrite no
+no-appendfsync-on-rewrite <%= @redis_no_appendfsync_on_rewrite ? 'yes' : 'no' %>
 
 # Automatic rewrite of the append only file.
 # Redis is able to automatically rewrite the log file implicitly calling
@@ -591,8 +591,8 @@ no-appendfsync-on-rewrite no
 # Specify a percentage of zero in order to disable the automatic AOF
 # rewrite feature.
 
-auto-aof-rewrite-percentage 100
-auto-aof-rewrite-min-size 64mb
+auto-aof-rewrite-percentage <%= @redis_auto_aof_rewrite_percentage %>
+auto-aof-rewrite-min-size <%= @redis_auto_aof_rewrite_min_size %>
 
 <%- if (version_c <=> [2,8,15]) >= 0 -%>
 # An AOF file may be found to be truncated at the end during the Redis
@@ -617,7 +617,7 @@ auto-aof-rewrite-min-size 64mb
 # the server will still exit with an error. This option only applies when
 # Redis will try to read more data from the AOF file but not enough bytes
 # will be found.
-aof-load-truncated yes
+aof-load-truncated <%= @redis_aof_load_truncated ? 'yes' : 'no' %>
 <%- end -%>
 
 ################################ LUA SCRIPTING  ###############################
@@ -968,4 +968,4 @@ hz 10
 # the file will be fsync-ed every 32 MB of data generated. This is useful
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
-aof-rewrite-incremental-fsync yes
+aof-rewrite-incremental-fsync <%= @redis_aof_rewrite_incremental_fsync ? 'yes' : 'no' %>
