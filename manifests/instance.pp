@@ -81,6 +81,30 @@
 #   Append Only File rewrite incremental fsync.
 #   Default: yes
 #
+# [*redis_cluster_enabled*]
+#   Cluster enabled.
+#   Default: false (>= 3.0.0)
+#
+# [*redis_cluster_config_file*]
+#   Cluster config file for nodes.
+#   Default: nodes-6379.conf (>= 3.0.0)
+#
+# [*redis_cluster_node_timeout*]
+#   Cluster node timeout.
+#   Default: 15000 (>= 3.0.0)
+#
+# [*redis_cluster_slave_validity_factor*]
+#   Cluster slave validity factor for failover.
+#   Default: 10 (>= 3.0.0)
+#
+# [*redis_cluster_migration_barrier*]
+#   Cluster migration barrier for slaves.
+#   Default: 1 (>= 3.0.0)
+#
+# [*redis_cluster_require_full_coverage*]
+#   Cluster require full coverage of hash slots.
+#   Default: true (>= 3.0.0)
+#
 # === Examples
 #
 # redis::instance { 'redis-6900':
@@ -115,7 +139,13 @@ define redis::instance (
   $redis_auto_aof_rewrite_percentage = $redis::params::redis_auto_aof_rewrite_percentage,
   $redis_auto_aof_rewrite_min_size = $redis::params::redis_auto_aof_rewrite_min_size,
   $redis_aof_load_truncated = $redis::params::redis_aof_load_truncated,
-  $redis_aof_rewrite_incremental_fsync = $redis::params::redis_aof_rewrite_incremental_fsync
+  $redis_aof_rewrite_incremental_fsync = $redis::params::redis_aof_rewrite_incremental_fsync,
+  $redis_cluster_enabled = $redis::params::redis_cluster_enabled,
+  $redis_cluster_config_file = $redis::params::redis_cluster_config_file,
+  $redis_cluster_node_timeout = $redis::params::redis_cluster_node_timeout,
+  $redis_cluster_slave_validity_factor = $redis::params::redis_cluster_slave_validity_factor,
+  $redis_cluster_migration_barrier = $redis::params::redis_cluster_migration_barrier,
+  $redis_cluster_require_full_coverage = $redis::params::redis_cluster_require_full_coverage
 ) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing

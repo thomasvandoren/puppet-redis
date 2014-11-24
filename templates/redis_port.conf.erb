@@ -646,6 +646,7 @@ lua-time-limit 5000
 # cluster node enable the cluster support uncommenting the following:
 #
 # cluster-enabled yes
+cluster-enabled <%= @redis_cluster_enabled ? 'yes' : 'no' %>
 <%- end -%>
 
 <%- if (version_c <=> [3,0,0]) >= 0 -%>
@@ -656,6 +657,7 @@ lua-time-limit 5000
 # overlapping cluster configuration file names.
 #
 # cluster-config-file nodes-6379.conf
+cluster-config-file <%= @redis_cluster_config_file %>
 <%- end -%>
 
 <%- if (version_c <=> [3,0,0]) >= 0 -%>
@@ -664,6 +666,7 @@ lua-time-limit 5000
 # Most other internal time limits are multiple of the node timeout.
 #
 # cluster-node-timeout 15000
+cluster-node-timeout <%= @redis_cluster_node_timeout %>
 <%- end -%>
 
 <%- if (version_c <=> [3,0,0]) >= 0 -%>
@@ -711,6 +714,7 @@ lua-time-limit 5000
 # the cluster will always be able to continue.
 #
 # cluster-slave-validity-factor 10
+cluster-slave-validity-factor <%= @redis_cluster_slave_validity_factor %>
 <%- end -%>
 
 <%- if (version_c <=> [3,0,0]) >= 0 -%>
@@ -732,6 +736,7 @@ lua-time-limit 5000
 # in production.
 #
 # cluster-migration-barrier 1
+cluster-migration-barrier <%= @redis_cluster_migration_barrier %>
 <%- end -%>
 
 <%- if (version_c <=> [3,0,0]) >= 0 -%>
@@ -747,6 +752,7 @@ lua-time-limit 5000
 # option to no.
 #
 # cluster-require-full-coverage yes
+cluster-require-full-coverage <%= @redis_cluster_require_full_coverage ? 'yes' : 'no' %>
 <%- end -%>
 
 # In order to setup your cluster make sure to read the documentation

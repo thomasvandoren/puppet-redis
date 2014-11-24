@@ -215,6 +215,48 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-percentage 42$/)
       should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-min-size 32mb$/)
       should contain_file('redis_port_8000.conf').with_content(/^aof-rewrite-incremental-fsync no$/)
+      should_not contain_file('redis_port_8000.conf').with_content(/^cluster-enabled$/)
+    end # it
+  end # context
+
+  context "On a Debian system with version 3.0 param non-cluster" do
+    let :params do
+      {
+        :version    => '3.0.0-rc1',
+        :redis_port => '8001',
+      }
+    end # let
+
+    it do
+      should compile.with_all_deps
+      should contain_file('redis_port_8001.conf').with_ensure('present')
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-enabled no$/)
+    end # it
+  end # context
+
+  context "On a Debian system with version 3.0 param cluster" do
+    let :params do
+      {
+        :version                             => '3.0.0-rc1',
+        :redis_port                          => '8001',
+        :redis_cluster_enabled               => true,
+        :redis_cluster_config_file           => 'node-config-8001.conf',
+        :redis_cluster_node_timeout          => 30000,
+        :redis_cluster_slave_validity_factor => 11,
+        :redis_cluster_migration_barrier     => 2,
+        :redis_cluster_require_full_coverage => false,
+      }
+    end # let
+
+    it do
+      should compile.with_all_deps
+      should contain_file('redis_port_8001.conf').with_ensure('present')
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-enabled yes$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-config-file node-config-8001.conf$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-node-timeout 30000$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-slave-validity-factor 11$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-migration-barrier 2$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-require-full-coverage no$/)
     end # it
   end # context
 end # describe
