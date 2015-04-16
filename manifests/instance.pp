@@ -90,22 +90,7 @@ define redis::instance (
 
   $version = $redis::version
 
-  case $version {
-    /^2\.4\.\d+$/: {
-      if ($redis_max_clients == false) {
-        $real_redis_max_clients = 0
-      }
-      else {
-        $real_redis_max_clients = $redis_max_clients
-      }
-    }
-    /^2\.[68]\.\d+|3\.d+\.d+$/: {
-      $real_redis_max_clients = $redis_max_clients
-    }
-    default: {
-      fail("Invalid redis version, ${version}. It must match 2.4.\\d+ or 2.[68].\\d+.")
-    }
-  }
+  $real_redis_max_clients = $redis_max_clients
 
   file { "redis-lib-port-${redis_port}":
     ensure => directory,
