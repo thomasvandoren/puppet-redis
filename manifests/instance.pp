@@ -99,7 +99,7 @@ define redis::instance (
         $real_redis_max_clients = $redis_max_clients
       }
     }
-    /(^2\.[68]\.\d+|3\.d+\.d+$/: {
+    /^2\.[68]\.\d+|3\.d+\.d+$/: {
       $real_redis_max_clients = $redis_max_clients
     }
     default: {
