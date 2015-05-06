@@ -189,7 +189,8 @@ describe 'redis', :type => 'class' do
         :redis_no_appendfsync_on_rewrite     => true,
         :redis_auto_aof_rewrite_percentage   => 42,
         :redis_auto_aof_rewrite_min_size     => '32mb',
-        :redis_aof_rewrite_incremental_fsync => false
+        :redis_aof_rewrite_incremental_fsync => false,
+        :redis_max_memory_policy             => 'volatile-lru'
       }
     end # let
 
@@ -215,6 +216,7 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-percentage 42$/)
       should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-min-size 32mb$/)
       should contain_file('redis_port_8000.conf').with_content(/^aof-rewrite-incremental-fsync no$/)
+      should contain_file('redis_port_8000.conf').with_content(/^maxmemory-policy volatile-lru$/)
       should_not contain_file('redis_port_8000.conf').with_content(/^cluster-enabled$/)
     end # it
   end # context

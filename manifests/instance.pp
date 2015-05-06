@@ -105,6 +105,10 @@
 #   Cluster require full coverage of hash slots.
 #   Default: true (>= 3.0.0)
 #
+# [*redis_max_memory_policy*]
+#   Set the redis config value maxmemory-policy.
+#   Default: noeviction
+#
 # === Examples
 #
 # redis::instance { 'redis-6900':
@@ -145,7 +149,8 @@ define redis::instance (
   $redis_cluster_node_timeout = $redis::params::redis_cluster_node_timeout,
   $redis_cluster_slave_validity_factor = $redis::params::redis_cluster_slave_validity_factor,
   $redis_cluster_migration_barrier = $redis::params::redis_cluster_migration_barrier,
-  $redis_cluster_require_full_coverage = $redis::params::redis_cluster_require_full_coverage
+  $redis_cluster_require_full_coverage = $redis::params::redis_cluster_require_full_coverage,
+  $redis_max_memory_policy = $redis::params::redis_max_memory_policy
 ) {
 
   # Using Exec as a dependency here to avoid dependency cyclying when doing
