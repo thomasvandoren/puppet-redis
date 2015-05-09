@@ -59,7 +59,7 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port_6379.conf').with_content(/hash-max-ziplist-value 64/)
 
       # The bind config should not be present by default.
-      should_not contain_file('redis_port_6379.conf').with_content(/bind \d+\.\d+\.\d+\.\d+/)
+      should_not contain_file('redis_port_6379.conf').with_content(/^bind \d+\.\d+\.\d+\.\d+/)
     end # it
   end # context
 
@@ -172,17 +172,25 @@ describe 'redis', :type => 'class' do
   context "On a Debian system with instance parameters specified" do
     let :params do
       {
-        :redis_port                    => '8000',
-        :redis_bind_address            => '10.1.2.3',
-        :redis_max_memory              => '64gb',
-        :redis_max_clients             => '10000',
-        :redis_timeout                 => '15',
-        :redis_loglevel                => 'warning',
-        :redis_databases               => '64',
-        :redis_slowlog_log_slower_than => '5000',
-        :redis_slowlog_max_len         => '4096',
-        :redis_password                => 'sekrit',
-        :redis_saves                   => ['save 17 42', 'save 1 2']
+        :redis_port                          => '8000',
+        :redis_bind_address                  => '10.1.2.3',
+        :redis_max_memory                    => '64gb',
+        :redis_max_clients                   => '10000',
+        :redis_timeout                       => '15',
+        :redis_loglevel                      => 'warning',
+        :redis_databases                     => '64',
+        :redis_slowlog_log_slower_than       => '5000',
+        :redis_slowlog_max_len               => '4096',
+        :redis_password                      => 'sekrit',
+        :redis_saves                         => ['save 17 42', 'save 1 2'],
+        :redis_appendonly                    => true,
+        :redis_appendfilename                => 'aof.aof',
+        :redis_appendfsync                   => 'always',
+        :redis_no_appendfsync_on_rewrite     => true,
+        :redis_auto_aof_rewrite_percentage   => 42,
+        :redis_auto_aof_rewrite_min_size     => '32mb',
+        :redis_aof_rewrite_incremental_fsync => false,
+        :redis_max_memory_policy             => 'volatile-lru'
       }
     end # let
 
@@ -201,6 +209,56 @@ describe 'redis', :type => 'class' do
       should contain_file('redis_port_8000.conf').with_content(/^requirepass sekrit$/)
       should contain_file('redis_port_8000.conf').with_content(/^save 17 42$/)
       should contain_file('redis_port_8000.conf').with_content(/^save 1 2$/)
+      should contain_file('redis_port_8000.conf').with_content(/^appendonly yes$/)
+      should contain_file('redis_port_8000.conf').with_content(/^appendfilename "aof.aof"$/)
+      should contain_file('redis_port_8000.conf').with_content(/^appendfsync always$/)
+      should contain_file('redis_port_8000.conf').with_content(/^no-appendfsync-on-rewrite yes$/)
+      should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-percentage 42$/)
+      should contain_file('redis_port_8000.conf').with_content(/^auto-aof-rewrite-min-size 32mb$/)
+      should contain_file('redis_port_8000.conf').with_content(/^aof-rewrite-incremental-fsync no$/)
+      should contain_file('redis_port_8000.conf').with_content(/^maxmemory-policy volatile-lru$/)
+      should_not contain_file('redis_port_8000.conf').with_content(/^cluster-enabled$/)
+    end # it
+  end # context
+
+  context "On a Debian system with version 3.0 param non-cluster" do
+    let :params do
+      {
+        :version    => '3.0.0-rc1',
+        :redis_port => '8001',
+      }
+    end # let
+
+    it do
+      should compile.with_all_deps
+      should contain_file('redis_port_8001.conf').with_ensure('present')
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-enabled no$/)
+    end # it
+  end # context
+
+  context "On a Debian system with version 3.0 param cluster" do
+    let :params do
+      {
+        :version                             => '3.0.0-rc1',
+        :redis_port                          => '8001',
+        :redis_cluster_enabled               => true,
+        :redis_cluster_config_file           => 'node-config-8001.conf',
+        :redis_cluster_node_timeout          => 30000,
+        :redis_cluster_slave_validity_factor => 11,
+        :redis_cluster_migration_barrier     => 2,
+        :redis_cluster_require_full_coverage => false,
+      }
+    end # let
+
+    it do
+      should compile.with_all_deps
+      should contain_file('redis_port_8001.conf').with_ensure('present')
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-enabled yes$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-config-file node-config-8001.conf$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-node-timeout 30000$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-slave-validity-factor 11$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-migration-barrier 2$/)
+      should contain_file('redis_port_8001.conf').with_content(/^cluster-require-full-coverage no$/)
     end # it
   end # context
 end # describe
