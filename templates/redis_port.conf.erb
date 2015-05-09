@@ -488,6 +488,7 @@ maxmemory <%= @redis_max_memory %>
 # The default is:
 #
 # maxmemory-policy noeviction
+maxmemory-policy <%= @redis_max_memory_policy %>
 
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can tune it for speed or

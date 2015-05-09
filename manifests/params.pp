@@ -44,5 +44,6 @@ class redis::params {
   $redis_cluster_slave_validity_factor = 10
   $redis_cluster_migration_barrier = 1
   $redis_cluster_require_full_coverage = true
+  $redis_max_memory_policy = 'noeviction'
 
 }
