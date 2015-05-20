@@ -86,6 +86,7 @@ class redis (
   $version = $redis::params::version,
   $redis_src_dir = $redis::params::redis_src_dir,
   $redis_bin_dir = $redis::params::redis_bin_dir,
+  $redis_slaveof_ip = $redis::params::redis_slaveof_ip,
   $redis_user = $redis::params::redis_user,
   $redis_group = $redis::params::redis_group,
   $redis_port = $redis::params::redis_port,
@@ -107,21 +108,6 @@ class redis (
   $redis_pkg_name = "redis-${version}.tar.gz"
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
-  # Install default instance
-  redis::instance { 'redis-default':
-    redis_port                    => $redis_port,
-    redis_bind_address            => $redis_bind_address,
-    redis_max_memory              => $redis_max_memory,
-    redis_max_clients             => $redis_max_clients,
-    redis_timeout                 => $redis_timeout,
-    redis_loglevel                => $redis_loglevel,
-    redis_databases               => $redis_databases,
-    redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
-    redis_slowlog_max_len         => $redis_slowlog_max_len,
-    redis_password                => $redis_password,
-    redis_saves                   => $redis_saves,
-  }
-
   File {
     owner => $redis_user,
     group => $redis_group
@@ -136,13 +122,16 @@ class redis (
     ensure => directory,
     path   => '/var/lib/redis',
   }
+  file { "/etc/sysctl.d/overcommit.conf":
+    ensure => file,
+    content => "vm.overcommit_memory=1",
+  }
 
   exec { 'get-redis-pkg':
     command => "/usr/bin/wget --output-document ${redis_pkg} http://download.redis.io/releases/${redis_pkg_name}",
     unless  => "/usr/bin/test -f ${redis_pkg}",
     require => File[$redis_src_dir],
   }
-
   file { 'redis-cli-link':
     ensure => link,
     path   => '/usr/local/bin/redis-cli',

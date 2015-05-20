@@ -14,20 +14,22 @@
 
 # By default Redis does not run as a daemon. Use 'yes' if you need it.
 # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
-daemonize no
+daemonize yes
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
-pidfile /var/run/redis.pid
+pidfile /var/run/redis-<%= @redis_port %>.pid
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port 6379
+port <%= @redis_port %>
 
 # If you want you can bind a single interface, if the bind option is not
 # specified all the interfaces will listen for incoming connections.
 #
-# bind 127.0.0.1
+<% if @redis_bind_address %>
+bind <%= @redis_bind_address %>
+<% end %>
 
 # Specify the path for the unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
@@ -37,7 +39,7 @@ port 6379
 # unixsocketperm 755
 
 # Close the connection after a client is idle for N seconds (0 to disable)
-timeout 0
+timeout <%= @redis_timeout %>
 
 # TCP keepalive.
 #
@@ -53,7 +55,7 @@ timeout 0
 # On other kernels the period depends on the kernel configuration.
 #
 # A reasonable value for this option is 60 seconds.
-tcp-keepalive 0
+timeout <%= @redis_timeout %>
 
 # Specify the server verbosity level.
 # This can be one of:
@@ -61,12 +63,12 @@ tcp-keepalive 0
 # verbose (many rarely useful info, but not a mess like the debug level)
 # notice (moderately verbose, what you want in production probably)
 # warning (only very important / critical messages are logged)
-loglevel notice
+loglevel <%= @redis_loglevel %>
 
 # Specify the log file name. Also 'stdout' can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile stdout
+logfile /var/log/redis-<%= @title %>.log
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -81,7 +83,7 @@ logfile stdout
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
 # dbid is a number between 0 and 'databases'-1
-databases 16
+databases <%= @redis_databases %>
 
 ################################ SNAPSHOTTING  #################################
 #
@@ -105,9 +107,13 @@ databases 16
 #
 #   save ""
 
-save 900 1
-save 300 10
-save 60 10000
+# custom zapier settings
+<% if @redis_save %>
+save <%= @redis_save %>
+<% else %>
+# longer than 16 minutes
+save 1009 1
+<% end %>
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
@@ -140,7 +146,7 @@ rdbcompression yes
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename dump.rdb
+dbfilename dump-<%= @title %>.rdb
 
 # The working directory.
 #
@@ -150,7 +156,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 # 
 # Note that you must specify a directory here, not a file name.
-dir ./
+dir /var/lib/redis
 
 ################################# REPLICATION #################################
 
@@ -159,7 +165,9 @@ dir ./
 # so for example it is possible to configure the slave to save the DB with a
 # different interval, or to listen to another port, and so on.
 #
-# slaveof <masterip> <masterport>
+<% if @redis_slaveof_ip %>
+slaveof <%= @redis_slaveof_ip %> <%= @redis_port %>
+<% end %>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -195,7 +203,7 @@ slave-serve-stale-data yes
 # such as CONFIG, DEBUG, and so forth. To a limited extend you can improve
 # security of read only slaves using 'rename-command' to shadow all the
 # administrative / dangerous commands.
-slave-read-only yes
+slave-read-only <%= @redis_read_only_slave %>
 
 # Slaves send PINGs to server in a predefined interval. It's possible to change
 # this interval with the repl_ping_slave_period option. The default value is 10
@@ -255,7 +263,9 @@ slave-priority 100
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-# requirepass foobared
+<% if @redis_password %>
+requirepass <%= @redis_password %>
+<% end %>
 
 # Command renaming.
 #
@@ -287,7 +297,9 @@ slave-priority 100
 # Once the limit is reached Redis will close all the new connections sending
 # an error 'max number of clients reached'.
 #
-# maxclients 10000
+<% if @real_redis_max_clients %>
+maxclients <%= @real_redis_max_clients %>
+<% end %>
 
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys
@@ -312,7 +324,9 @@ slave-priority 100
 # limit for maxmemory so that there is some free RAM on the system for slave
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
-# maxmemory <bytes>
+<% if @redis_max_memory %>
+maxmemory <%= @redis_max_memory %>
+<% end %>
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached. You can select among five behaviors:
