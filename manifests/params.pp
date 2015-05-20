@@ -13,7 +13,7 @@
 # Copyright 2012 Thomas Van Doren, unless otherwise noted.
 #
 class redis::params {
-  $version = '2.6.13'
+  $version = '2.8.12'
   $redis_port = '6379'
   $redis_bind_address = false
   $redis_src_dir = '/opt/redis-src'
@@ -28,4 +28,8 @@ class redis::params {
   $redis_password = false
   $redis_slaveof_ip = false
   $redis_read_only_slave = 'yes'
+  $redis_saves = ['save 900 1', 'save 300 10', 'save 60 10000']
+  $redis_user = 'root'
+  $redis_group = 'root'
+
 }
