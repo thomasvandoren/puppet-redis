@@ -28,6 +28,16 @@
 #   Max memory usage configuration.
 #   Default: 4gb
 #
+# [*redis_max_memory_policy*]
+#   Max memory policy configuration:
+#     volatile-lru
+#     allkeys-lru
+#     volatile-random
+#     allkeys-random
+#     volatile-ttl
+#     noeviction
+#   Default: false
+#
 # [*redis_max_clients*]
 #   Set the redis config value maxclients. If no value provided, it is
 #   not included in the configuration for 2.6+ and set to 0 (unlimited)
@@ -91,6 +101,7 @@ class redis (
   $redis_port = $redis::params::redis_port,
   $redis_bind_address = $redis::params::redis_bind_address,
   $redis_max_memory = $redis::params::redis_max_memory,
+  $redis_max_memory_policy = $redis::params::redis_max_memory_policy,
   $redis_max_clients = $redis::params::redis_max_clients,
   $redis_timeout = $redis::params::redis_timeout,
   $redis_loglevel = $redis::params::redis_loglevel,
@@ -112,6 +123,7 @@ class redis (
     redis_port                    => $redis_port,
     redis_bind_address            => $redis_bind_address,
     redis_max_memory              => $redis_max_memory,
+    redis_max_memory_policy       => $redis_max_memory_policy,
     redis_max_clients             => $redis_max_clients,
     redis_timeout                 => $redis_timeout,
     redis_loglevel                => $redis_loglevel,
