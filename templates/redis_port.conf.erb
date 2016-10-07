@@ -102,7 +102,7 @@ dbfilename dump.rdb
 # Also the Append Only File will be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir /var/lib/redis/<%= @redis_port %>
+dir <%= @redis_work_dir %>/<%= @redis_port %>
 
 ################################# REPLICATION #################################
 

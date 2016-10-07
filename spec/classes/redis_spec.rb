@@ -21,11 +21,11 @@ describe 'redis', :type => 'class' do
       should contain_file('/etc/redis').with(:ensure => 'directory',
                                              :owner => 'root',
                                              :group => 'root')
-      should contain_file('redis-lib').with(:ensure => 'directory',
+      should contain_file('redis-work').with(:ensure => 'directory',
                                             :path   => '/var/lib/redis',
                                             :owner => 'root',
                                             :group => 'root')
-      should contain_file("redis-lib-port-6379").with(:ensure => 'directory',
+      should contain_file("redis-work-port-6379").with(:ensure => 'directory',
                                                       :path   => '/var/lib/redis/6379',
                                                       :owner => 'root',
                                                       :group => 'root')
@@ -79,9 +79,9 @@ describe 'redis', :type => 'class' do
 
       should contain_file('/fake/path/to/redis-src').with(:ensure => 'directory')
       should contain_file('/etc/redis').with(:ensure => 'directory')
-      should contain_file('redis-lib').with(:ensure => 'directory',
+      should contain_file('redis-work').with(:ensure => 'directory',
                                             :path   => '/var/lib/redis')
-      should contain_file('redis-lib-port-6379').with(:ensure => 'directory',
+      should contain_file('redis-work-port-6379').with(:ensure => 'directory',
                                                  :path   => '/var/lib/redis/6379')
       should contain_file('redis-init-6379').with(:ensure => 'present',
                                              :path   => '/etc/init.d/redis_6379',
@@ -146,8 +146,8 @@ describe 'redis', :type => 'class' do
       should compile.with_all_deps
       should contain_file('/opt/redis-src').with(:owner => 'my_user')
       should contain_file('/etc/redis').with(:owner => 'my_user')
-      should contain_file('redis-lib').with(:owner => 'my_user')
-      should contain_file('redis-lib-port-6379').with(:owner => 'my_user')
+      should contain_file('redis-work').with(:owner => 'my_user')
+      should contain_file('redis-work-port-6379').with(:owner => 'my_user')
       should contain_file('redis-init-6379').with(:owner => 'my_user')
       should_not contain_file('redis-pkg')
     end # it
@@ -162,8 +162,8 @@ describe 'redis', :type => 'class' do
       should compile.with_all_deps
       should contain_file('/opt/redis-src').with(:group => 'my_group')
       should contain_file('/etc/redis').with(:group => 'my_group')
-      should contain_file('redis-lib').with(:group => 'my_group')
-      should contain_file('redis-lib-port-6379').with(:group => 'my_group')
+      should contain_file('redis-work').with(:group => 'my_group')
+      should contain_file('redis-work-port-6379').with(:group => 'my_group')
       should contain_file('redis-init-6379').with(:group => 'my_group')
       should_not contain_file('redis-pkg')
     end # it

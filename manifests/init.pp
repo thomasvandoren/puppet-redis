@@ -64,6 +64,10 @@
 #   Redis snapshotting parameters. Set to false for no snapshots.
 #   Default: ['save 900 1', 'save 300 10', 'save 60 10000']
 #
+# [*redis_work_dir*]
+#   Workdir for redis where the db file will be stored.
+#   Default: '/var/lib/redis'
+#
 # === Examples
 #
 # include redis
@@ -98,7 +102,8 @@ class redis (
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
   $redis_slowlog_max_len = $redis::params::redis_slowlog_max_len,
   $redis_password = $redis::params::redis_password,
-  $redis_saves = $redis::params::redis_saves
+  $redis_saves = $redis::params::redis_saves,
+  $redis_work_dir = $redis::params::redis_work_dir
 ) inherits redis::params {
 
   include wget
@@ -120,6 +125,7 @@ class redis (
     redis_slowlog_max_len         => $redis_slowlog_max_len,
     redis_password                => $redis_password,
     redis_saves                   => $redis_saves,
+    redis_work_dir                => $redis_work_dir
   }
 
   File {
@@ -132,9 +138,9 @@ class redis (
   file { '/etc/redis':
     ensure => directory,
   }
-  file { 'redis-lib':
+  file { 'redis-work':
     ensure => directory,
-    path   => '/var/lib/redis',
+    path   => $redis_work_dir,
   }
 
   exec { 'get-redis-pkg':
