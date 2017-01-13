@@ -14,6 +14,7 @@
 #
 class redis::params {
 
+  $install_default_redis_instance = true
   $redis_port = '6379'
   $redis_bind_address = false
   $version = '2.8.12'
