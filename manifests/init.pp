@@ -16,6 +16,10 @@
 #   Location to install redis binaries.
 #   Default: /opt/redis
 #
+# [*install_default_redis_instance*]
+#   Install a default redis instance with the given redis_* arguments
+#   Default: true
+#
 # [*redis_port*]
 #   Accept redis connections on this port.
 #   Default: 6379
@@ -88,6 +92,7 @@ class redis (
   $redis_bin_dir = $redis::params::redis_bin_dir,
   $redis_user = $redis::params::redis_user,
   $redis_group = $redis::params::redis_group,
+  $install_default_redis_instance = $redis::params::install_default_redis_instance,
   $redis_port = $redis::params::redis_port,
   $redis_bind_address = $redis::params::redis_bind_address,
   $redis_max_memory = $redis::params::redis_max_memory,
@@ -107,19 +112,21 @@ class redis (
   $redis_pkg_name = "redis-${version}.tar.gz"
   $redis_pkg = "${redis_src_dir}/${redis_pkg_name}"
 
-  # Install default instance
-  redis::instance { 'redis-default':
-    redis_port                    => $redis_port,
-    redis_bind_address            => $redis_bind_address,
-    redis_max_memory              => $redis_max_memory,
-    redis_max_clients             => $redis_max_clients,
-    redis_timeout                 => $redis_timeout,
-    redis_loglevel                => $redis_loglevel,
-    redis_databases               => $redis_databases,
-    redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
-    redis_slowlog_max_len         => $redis_slowlog_max_len,
-    redis_password                => $redis_password,
-    redis_saves                   => $redis_saves,
+  if ($install_default_redis_instance) {
+    # Install default instance
+    redis::instance { 'redis-default':
+      redis_port                    => $redis_port,
+      redis_bind_address            => $redis_bind_address,
+      redis_max_memory              => $redis_max_memory,
+      redis_max_clients             => $redis_max_clients,
+      redis_timeout                 => $redis_timeout,
+      redis_loglevel                => $redis_loglevel,
+      redis_databases               => $redis_databases,
+      redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
+      redis_slowlog_max_len         => $redis_slowlog_max_len,
+      redis_password                => $redis_password,
+      redis_saves                   => $redis_saves,
+    }
   }
 
   File {
